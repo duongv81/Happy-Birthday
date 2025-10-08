@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Birthday App - Single File</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{ --glass-bg: rgba(255,255,255,0.06); --glass-brd: rgba(255,255,255,0.12); }
+    body { font-family: 'Poppins', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji','Segoe UI Emoji'; }
+    /* Animated gradient background */
+    #gradient { background: linear-gradient(rgba(2,6,23,0.6), rgba(2,6,23,0.6)), url('trangtri.jpg'); background-size: cover; background-position: center; filter: saturate(110%); }
+    @keyframes gradientShift { 0%{ background-position: 0% 50%; } 50%{ background-position: 100% 50%; } 100%{ background-position: 0% 50%; } }
+    /* Sparkling bubbles */
+    .bubble { position: absolute; bottom: -100px; border-radius: 9999px; opacity: 0.9; pointer-events: none; box-shadow: 0 0 12px rgba(255,255,255,0.35), inset 0 0 8px rgba(255,255,255,0.5); }
+    @keyframes rise {
+      0% { transform: translateY(0) scale(0.6); opacity: 0; }
+      10% { opacity: 0.9; }
+      100% { transform: translateY(-120vh) scale(1.2); opacity: 0; }
+    }
+
+
+    /* Card */
+    .card { width: 320px; perspective: 1200px; cursor: pointer; }
+    .card-inner { position: relative; width: 100%; height: 240px; transform-style: preserve-3d; transition: transform 800ms cubic-bezier(.2,.7,.2,1); }
+    .card.open .card-inner { transform: rotateY(180deg); }
+    .card-face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.25); }
+    .card-front { background: linear-gradient(135deg,#fde68a,#fca5a5); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 24px; letter-spacing: .5px; position: relative; }
+    .card-front:after{ content:''; position:absolute; inset:-1px; background: linear-gradient(120deg, rgba(255,255,255,0.4), transparent 40%); mix-blend-mode: overlay; }
+    .card-back { background: #fff; transform: rotateY(180deg); padding: 18px; overflow: auto; }
+
+    /* Cake (simple CSS cake) */
+    .cake { width: 220px; margin: 0 auto; }
+    .cake .layer { height: 40px; border-radius: 8px; margin-top: 8px; position: relative; box-shadow: inset 0 -6px 0 rgba(0,0,0,0.06); }
+    .cake .layer:nth-child(1){ background: #ffe4e6; }
+    .cake .layer:nth-child(2){ background: #fecdd3; }
+    .cake .layer:nth-child(3){ background: #fda4af; }
+    .cake .drip { position: absolute; top: -10px; left: 0; right: 0; height: 20px; background: radial-gradient(circle at 10% 20%, #fff 0 25%, transparent 26%), radial-gradient(circle at 30% 20%, #fff 0 25%, transparent 26%), radial-gradient(circle at 55% 20%, #fff 0 25%, transparent 26%), radial-gradient(circle at 75% 20%, #fff 0 25%, transparent 26%), radial-gradient(circle at 90% 20%, #fff 0 25%, transparent 26%); }
+
+    /* Intro overlay */
+    .intro-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #fff; backdrop-filter: blur(2px); }
+    .fade-out { animation: fadeOut 800ms ease forwards; }
+    @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
+    .soft-fade { animation: softfade 700ms ease forwards; }
+    @keyframes softfade { from { opacity: 0; transform: translateY(6px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+    /* Envelope (letter) styles */
+    .letter-image { position: relative; width: 300px; height: 200px; cursor: pointer; margin: 0 auto; }
+    .animated-mail { position: relative; height: 150px; width: 300px; transition: .4s; }
+    .animated-mail .body { position: absolute; bottom: 0; width: 0; height: 0; border-style: solid; border-width: 0 0 100px 200px; border-color: transparent transparent #ff8a80 transparent; z-index: 2; }
+    .animated-mail .top-fold { position: absolute; top: 50px; width: 0; height: 0; border-style: solid; border-width: 50px 100px 0 100px; transform-origin: 50% 0%; transition: transform .4s .4s, z-index .2s .4s; border-color: #ff5252 transparent transparent transparent; z-index: 2; }
+    .animated-mail .back-fold { position: absolute; bottom: 0; width: 200px; height: 100px; background: #ff5252; z-index: 0; }
+    .animated-mail .left-fold { position: absolute; bottom: 0; width: 0; height: 0; border-style: solid; border-width: 50px 0 50px 100px; border-color: transparent transparent transparent #ff5252; z-index: 2; }
+    .animated-mail .letter { left: 0; bottom: 20px; position: absolute; width: 200px; height: 0; background: #ffffff; z-index: 1; overflow: hidden; transition: .4s .2s; display: flex; justify-content: center; align-items: center; padding: 12px; }
+    .animated-mail .letter-content { font-size: 12px; font-weight: 600; color: #7a1142; line-height: 1.5; text-align: center; }
+    .letter-shadow { position: absolute; top: 200px; left: 50%; width: 400px; height: 30px; transition: .4s; transform: translateX(-50%); border-radius: 100%; background: radial-gradient(rgba(0,0,0,0.3), transparent, transparent); }
+    .letter-image:hover .animated-mail, .letter-image.open .animated-mail { transform: translateY(50px); }
+    .letter-image:hover .top-fold, .letter-image.open .top-fold { transition: transform .4s, z-index .2s; transform: rotateX(180deg); z-index: 0; }
+    .letter-image:hover .letter, .letter-image.open .letter { height: 180px; }
+    .letter-image:hover .letter-shadow, .letter-image.open .letter-shadow { width: 250px; }
+
+    /* Face frame positioning (for framefacecat.png) */
+    .face-frame { position: relative; }
+    /* Tune these variables to align the face in the frame's head area */
+    .face-frame { --face-left: 50%; --face-top: 42%; --face-size: 40%; }
+    .face-photo { position: absolute; left: var(--face-left); top: var(--face-top); transform: translate(-50%, -50%); width: var(--face-size); height: var(--face-size); object-fit: cover; border-radius: 9999px; clip-path: circle(50% at 50% 50%); }
+
+    /* Handwriting title */
+    .handwriting { font-family: 'Dancing Script', cursive; letter-spacing: 0.5px; }
+    /* Candle */
+    .candle { width: 32px; height: 180px; background: linear-gradient(180deg,#fff1f2,#fecdd3); border-radius: 10px; position: relative; box-shadow: inset 0 0 10px rgba(0,0,0,0.12); }
+    .candle:before { content:''; position:absolute; inset:0; border-radius:10px; background: repeating-linear-gradient(45deg, rgba(255,255,255,0.6) 0 14px, rgba(255,255,255,0.2) 14px 28px); mix-blend-mode: overlay; opacity: 0.6; }
+    .wick { position: absolute; top: -18px; left: 50%; width: 4px; height: 22px; transform: translateX(-50%); background: #222; border-radius: 2px; }
+    .flame { position: absolute; top: -48px; left: 50%; width: 26px; height: 40px; transform: translateX(-50%); background: radial-gradient(ellipse at center, #fff8c2 0%, #ffd166 40%, #ff7b54 100%); border-radius: 12px 12px 14px 14px / 16px 16px 18px 18px; animation: flicker 0.12s infinite alternate ease-in-out; filter: drop-shadow(0 0 14px rgba(255, 170, 0, 0.9)); }
+    @keyframes flicker { from { transform: translateX(-50%) scale(1) translateY(0); } to { transform: translateX(-50%) scale(1.06) translateY(-2px); } }
+
+    /* Candle intro overlay */
+    .candle-overlay { position: fixed; inset: 0; z-index: 50; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; background: radial-gradient(1200px 500px at 50% 110%, rgba(255,255,255,0.08), transparent 60%), linear-gradient(180deg, #0f172a, #020617); }
+    .candle-bottom { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(max(env(safe-area-inset-bottom), 8px)); }
+  </style>
+</head>
+<body class="min-h-screen text-slate-100 overflow-hidden relative">
+  <!-- Bubbles container -->
+  <div id="gradient" class="absolute inset-0 -z-10"></div>
+  <div id="bubbles" class="pointer-events-none absolute inset-0 -z-0"></div>
+
+  <!-- App container -->
+  <div class="relative z-10">
+    <!-- Top bar -->
+    <div class="sticky top-0 mx-4 mt-4 mb-2 rounded-2xl border border-white/10 bg-white/10 backdrop-blur px-4 py-3 shadow-lg flex items-center justify-between">
+      <h1 class="text-xl font-bold">🎂 Birthday App</h1>
+      <div class="text-sm opacity-90">
+        <a href="?" class="hover:underline">Trang Sinh Nhật</a>
+        <span class="mx-2">/</span>
+        <a href="?view=admin" class="hover:underline">Cài đặt</a>
+      </div>
+    </div>
+
+    <!-- FRONTEND VIEW -->
+    <main id="frontend" class="px-4 py-2">
+      <!-- Candle Intro -->
+      <div id="intro" class="candle-overlay">
+        <div class="fixed top-6 left-1/2 -translate-x-1/2 text-center z-[60]">
+          <div class="text-2xl md:text-3xl font-semibold mb-2">Hãy thổi nến</div>
+          <div id="countdown" class="text-5xl md:text-6xl font-bold">3</div>
+        </div>
+        <div class="candle-bottom">
+          <div class="candle relative scale-[1.06] mx-auto">
+            <div class="wick"></div>
+            <div id="flame" class="flame"></div>
+          </div>
+        </div>
+        <canvas id="fireworks" class="pointer-events-none fixed inset-0 z-[55] opacity-0 transition-opacity duration-300"></canvas>
+        <div id="darken" class="pointer-events-none fixed inset-0 bg-black/70 z-[54] opacity-0 transition-opacity duration-300"></div>
+      </div>
+
+      <section id="scene" class="container mx-auto px-4 pt-10 hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          <!-- Left: Cake -->
+          <div class="relative flex items-center justify-center w-full">
+            <div class="relative flex items-center justify-center w-[55vw] max-w-[720px] min-w-[280px]">
+              <img src="banhkem.png" alt="Bánh kem" class="w-full h-auto drop-shadow-[0_20px_40px_rgba(0,0,0,0.35)]" />
+              <img src="hpbd.png" alt="HPBD" class="absolute -top-12 -left-16 w-1/2 rotate-0 drop-shadow-[0_8px_18px_rgba(0,0,0,0.25)]" />
+              <img id="openWishBox" src="lathu.png" alt="Lá thư" class="absolute -bottom-4 -right-4 w-1/4 rotate-[30deg] drop-shadow-[0_10px_24px_rgba(0,0,0,0.25)] cursor-pointer" />
+            </div>
+          </div>
+
+          <!-- Right: Face frame -->
+          <div class="relative face-frame mx-auto md:mx-0 w-[50vw] max-w-[520px] min-w-[260px]">
+            <img src="framefacecat.png" alt="Khung mặt" class="w-full h-auto select-none pointer-events-none" />
+            <img id="photo" alt="Ảnh" class="face-photo hidden" />
+            <div id="photoPlaceholder" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-slate-200/80 text-sm bg-black/30 px-3 py-1 rounded-lg">Chưa có ảnh. Thêm trong Cài đặt.</div>
+          </div>
+
+          <!-- Name under -->
+          <div class="md:col-span-2 flex justify-center">
+            <h2 id="name" class="handwriting text-4xl md:text-5xl font-semibold"></h2>
+          </div>
+        </div>
+      </section>
+
+      <!-- Letter Modal -->
+      <div id="letterModal" class="hidden fixed inset-0 z-50 flex items-center justify-center">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+        <div class="relative bg-white/95 rounded-2xl w-[92vw] max-w-xl max-h-[82vh] overflow-auto shadow-2xl p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-xl font-bold text-slate-800">Thông điệp</h3>
+            <button id="closeLetter" class="px-3 py-1.5 rounded-lg bg-slate-800 text-white hover:bg-slate-700">Đóng</button>
+          </div>
+          <p id="wishText" class="text-slate-700 whitespace-pre-line leading-relaxed"></p>
+        </div>
+      </div>
+
+      <!-- Audio controls -->
+      <div class="fixed bottom-4 right-4 flex items-center gap-3 bg-white/10 backdrop-blur px-3 py-2 rounded-xl border border-white/10 shadow-lg">
+        <button id="playMusic" class="px-3 py-1.5 rounded-lg bg-pink-500 hover:bg-pink-400 text-white font-semibold disabled:opacity-50">Phát nhạc</button>
+        <button id="pauseMusic" class="px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-white font-semibold disabled:opacity-50">Tạm dừng</button>
+        <input id="volume" type="range" min="0" max="1" step="0.01" class="w-28" />
+      </div>
+    </main>
+
+    <!-- ADMIN VIEW -->
+    <section id="admin" class="px-4 py-6 hidden">
+      <div class="container mx-auto max-w-2xl bg-white/5 border border-white/10 rounded-2xl p-6">
+        <h2 class="text-2xl font-bold mb-4">Cài đặt</h2>
+        <form id="settingsForm" class="space-y-4">
+          <div>
+            <label class="block text-sm mb-1">Tên người nhận</label>
+            <input id="inputName" type="text" class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-white/10" placeholder="VD: Linh" />
+          </div>
+          <div>
+            <label class="block text-sm mb-1">Lời chúc</label>
+            <textarea id="inputWish" rows="5" class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-white/10" placeholder="Viết lời chúc ở đây..."></textarea>
+          </div>
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm mb-1">Ảnh (jpg/png)</label>
+              <input id="inputPhoto" type="file" accept="image/*" class="w-full" />
+              <p class="text-xs opacity-70 mt-1">Sẽ được chuyển sang Base64 và lưu.</p>
+            </div>
+            <div>
+              <label class="block text-sm mb-1">Nhạc nền (mp3/m4a/ogg)</label>
+              <input id="inputMusic" type="file" accept="audio/*" class="w-full" />
+              <p class="text-xs opacity-70 mt-1">Sẽ được chuyển sang Base64 và lưu.</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 pt-2">
+            <button type="submit" class="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-white font-semibold">Lưu Cài Đặt</button>
+            <button type="button" id="clearAll" class="px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-white">Xóa toàn bộ</button>
+          </div>
+          <div class="flex flex-wrap items-center gap-3 pt-3">
+            <button type="button" id="exportJson" class="px-4 py-2 rounded-lg bg-indigo-500 hover:bg-indigo-400 text-white font-semibold">Tải JSON</button>
+
+            <label class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white cursor-pointer">
+              Nhập JSON
+              <input id="importJsonFile" type="file" accept="application/json" class="hidden" />
+            </label>
+
+            <div class="flex gap-2 w-full md:w-auto">
+              <input id="importJsonUrl" type="url" placeholder="URL data.json" class="px-3 py-2 rounded-lg bg-slate-900 border border-white/10 w-full md:w-72" />
+              <button type="button" id="importJsonUrlBtn" class="px-3 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white">Nạp URL</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // ---------- Storage helpers ----------
+    const STORAGE_KEY = 'birthday_app_settings_v1';
+    const LIMITS = {
+      imageMaxPixels: 1280,          // max width/height for image resize
+      imageQuality: 0.82,            // JPEG quality for export
+      imageMaxFileBytes: 3 * 1024 * 1024,  // 3MB raw file guard
+      audioMaxFileBytes: 8 * 1024 * 1024,  // 8MB raw file guard
+      imageMaxBase64: 1_900_000,     // ~1.9M chars (~1.4MB binary)
+      audioMaxBase64: 3_400_000      // ~3.4M chars (~2.5MB binary)
+    };
+
+    function readSettings(){
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : { name: '', wish: '', photoBase64: '', musicBase64: '' };
+      } catch (e) {
+        console.error('Failed to parse settings', e);
+        return { name: '', wish: '', photoBase64: '', musicBase64: '' };
+      }
+    }
+
+    function writeSettings(settings){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+    }
+
+    function toBase64(file){
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function imageFileToCompressedBase64(file){
+      if(file.size > LIMITS.imageMaxFileBytes){
+        throw new Error('Ảnh quá lớn. Vui lòng chọn ảnh < 3MB.');
+      }
+      const dataUrl = await toBase64(file);
+      const img = await new Promise((resolve, reject) => {
+        const i = new Image();
+        i.onload = () => resolve(i);
+        i.onerror = () => reject(new Error('Không thể đọc ảnh.'));
+        i.src = dataUrl;
+      });
+      const maxSide = LIMITS.imageMaxPixels;
+      let { width, height } = img;
+      if(width <= maxSide && height <= maxSide){
+        // still check length limit
+        if(dataUrl.length > LIMITS.imageMaxBase64){
+          // force re-encode to reduce
+        } else {
+          return dataUrl;
+        }
+      }
+      const scale = Math.min(maxSide / width, maxSide / height);
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(width * scale);
+      canvas.height = Math.round(height * scale);
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      let quality = LIMITS.imageQuality;
+      let output = canvas.toDataURL('image/jpeg', quality);
+      // attempt a couple of reductions if still large
+      let attempts = 0;
+      while(output.length > LIMITS.imageMaxBase64 && attempts < 3){
+        quality *= 0.8;
+        output = canvas.toDataURL('image/jpeg', Math.max(0.5, quality));
+        attempts++;
+      }
+      if(output.length > LIMITS.imageMaxBase64){
+        throw new Error('Ảnh sau nén vẫn quá lớn. Hãy chọn ảnh nhỏ hơn.');
+      }
+      return output;
+    }
+
+    // ---------- Routing ----------
+    function isAdmin(){
+      const params = new URLSearchParams(location.search);
+      return params.get('view') === 'admin';
+    }
+
+    function showView(){
+      document.getElementById('admin').classList.toggle('hidden', !isAdmin());
+      document.getElementById('frontend').classList.toggle('hidden', isAdmin());
+    }
+
+    // ---------- Bubbles ----------
+    const bubblesContainer = document.getElementById('bubbles');
+    function spawnBubble(){
+      const bubble = document.createElement('div');
+      const size = Math.random()*14 + 8; // 8-22px
+      const palette = ['rgba(255,255,255,0.35)','rgba(251,113,133,0.35)','rgba(192,132,252,0.35)','rgba(56,189,248,0.35)','rgba(250,204,21,0.35)'];
+      const color = palette[Math.floor(Math.random()*palette.length)];
+      bubble.className = 'bubble';
+      bubble.style.left = Math.random()*100 + 'vw';
+      bubble.style.width = size + 'px';
+      bubble.style.height = size + 'px';
+      const duration = Math.random()*6 + 6; // 6-12s
+      bubble.style.animation = `rise ${duration}s linear`;
+      bubble.style.background = color;
+      bubble.style.opacity = (Math.random()*0.5 + 0.4).toString();
+      bubblesContainer.appendChild(bubble);
+      setTimeout(() => bubble.remove(), duration*1000);
+    }
+    setInterval(spawnBubble, 200);
+    for(let i=0;i<28;i++){ setTimeout(spawnBubble, i*220); }
+
+    // ---------- Admin form ----------
+    const form = document.getElementById('settingsForm');
+    const inputName = document.getElementById('inputName');
+    const inputWish = document.getElementById('inputWish');
+    const inputPhoto = document.getElementById('inputPhoto');
+    const inputMusic = document.getElementById('inputMusic');
+    const clearAllBtn = document.getElementById('clearAll');
+    // Export/Import controls
+    function exportSettingsAsJSON(){
+      const s = readSettings();
+      const blob = new Blob([JSON.stringify(s, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'data.json';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+    async function importSettingsFromFile(file){
+      try{
+        const text = await file.text();
+        const json = JSON.parse(text);
+        const shape = { name:'', wish:'', photoBase64:'', musicBase64:'' };
+        const merged = { ...shape, ...json };
+        writeSettings(merged);
+        inputName.value = merged.name || '';
+        inputWish.value = merged.wish || '';
+        alert('Đã nhập JSON và cập nhật cài đặt!');
+      }catch(e){
+        console.error(e);
+        alert('Không đọc được file JSON.');
+      }
+    }
+    async function importSettingsFromURL(url){
+      if(!url){ alert('Vui lòng nhập URL hợp lệ.'); return; }
+      try{
+        const res = await fetch(url, { cache: 'no-store' });
+        if(!res.ok) throw new Error('HTTP ' + res.status);
+        const json = await res.json();
+        const shape = { name:'', wish:'', photoBase64:'', musicBase64:'' };
+        const merged = { ...shape, ...json };
+        writeSettings(merged);
+        inputName.value = merged.name || '';
+        inputWish.value = merged.wish || '';
+        alert('Đã nạp JSON từ URL và cập nhật cài đặt!');
+        try{
+          const encoded = encodeURIComponent(url);
+          const params = new URLSearchParams(location.search);
+          params.set('view','admin');
+          params.set('data', encoded);
+          history.replaceState(null, '', `?${params.toString()}`);
+        }catch(_){ }
+      }catch(e){
+        console.error(e);
+        alert('Không tải được JSON từ URL.');
+      }
+    }
+
+    function initAdmin(){
+      const s = readSettings();
+      inputName.value = s.name || '';
+      inputWish.value = s.wish || '';
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const s = readSettings();
+        s.name = inputName.value.trim();
+        s.wish = inputWish.value.trim();
+        try {
+          if(inputPhoto.files && inputPhoto.files[0]){
+            s.photoBase64 = await imageFileToCompressedBase64(inputPhoto.files[0]);
+          }
+          if(inputMusic.files && inputMusic.files[0]){
+            const f = inputMusic.files[0];
+            if(f.size > LIMITS.audioMaxFileBytes){
+              throw new Error('Nhạc nền quá lớn. Vui lòng chọn file < 8MB.');
+            }
+            const musicDataUrl = await toBase64(f);
+            if(musicDataUrl.length > LIMITS.audioMaxBase64){
+              throw new Error('Nhạc nền quá dài. Hãy chọn file ngắn hơn.');
+            }
+            s.musicBase64 = musicDataUrl;
+          }
+          try {
+            writeSettings(s);
+          } catch(storageErr){
+            console.error(storageErr);
+            throw new Error('Bộ nhớ trình duyệt đầy (localStorage quota). Hãy xóa bớt dữ liệu.');
+          }
+          alert('Đã lưu cài đặt!');
+        } catch (err){
+          console.error(err);
+          alert(err && err.message ? err.message : 'Có lỗi khi chuyển đổi file.');
+        }
+      });
+
+      clearAllBtn.addEventListener('click', () => {
+        if(confirm('Xóa toàn bộ cài đặt?')){
+          localStorage.removeItem(STORAGE_KEY);
+          inputName.value = '';
+          inputWish.value = '';
+          inputPhoto.value = '';
+          inputMusic.value = '';
+          alert('Đã xóa!');
+        }
+      });
+
+      // Wire export/import
+      const exportBtn = document.getElementById('exportJson');
+      const importFileInput = document.getElementById('importJsonFile');
+      const importUrlInput = document.getElementById('importJsonUrl');
+      const importUrlBtn = document.getElementById('importJsonUrlBtn');
+
+      if(exportBtn){ exportBtn.addEventListener('click', exportSettingsAsJSON); }
+      if(importFileInput){
+        importFileInput.addEventListener('change', (e) => {
+          const f = e.target.files && e.target.files[0];
+          if(f) importSettingsFromFile(f);
+          e.target.value = '';
+        });
+      }
+      if(importUrlBtn){
+        importUrlBtn.addEventListener('click', () => {
+          importSettingsFromURL(importUrlInput.value.trim());
+        });
+      }
+    }
+
+    // ---------- Frontend load ----------
+    const nameEl = document.getElementById('name');
+    const wishEl = document.getElementById('wishText');
+    const photoEl = document.getElementById('photo');
+    const photoPh = document.getElementById('photoPlaceholder');
+
+    // Intro elements
+    // Intro elements
+    const intro = document.getElementById('intro');
+    const flame = document.getElementById('flame');
+    const countdownEl = document.getElementById('countdown');
+    const fireworksCanvas = document.getElementById('fireworks');
+    const darken = document.getElementById('darken');
+    const scene = document.getElementById('scene');
+    // Letter modal elements
+    const openLetterBtn = document.getElementById('openLetter');
+    const letterModal = document.getElementById('letterModal');
+    const closeLetterBtn = document.getElementById('closeLetter');
+    const openWishBoxImg = document.getElementById('openWishBox');
+
+    function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+    async function runIntro(){
+      // 3-2-1-0 countdown
+      let n = 3;
+      countdownEl.textContent = String(n);
+      for(let i=0;i<3;i++){
+        await sleep(1000);
+        n -= 1;
+        countdownEl.textContent = String(n);
+      }
+      // extinguish
+      flame && (flame.style.display = 'none');
+      // fireworks phase (~2.2s)
+      startFireworks(2200);
+      darken.classList.remove('opacity-0');
+      fireworksCanvas.classList.remove('opacity-0');
+      // force visible in case utility class missing
+      darken.style.opacity = '1';
+      fireworksCanvas.style.opacity = '1';
+      await sleep(2200);
+      // fade out intro
+      intro.classList.add('fade-out');
+      await sleep(700);
+      intro.style.display = 'none';
+      scene.classList.remove('hidden');
+    }
+
+    // ---------- Fireworks ----------
+    function startFireworks(durationMs){
+      const canvas = fireworksCanvas;
+      const ctx = canvas.getContext('2d');
+      const dpr = window.devicePixelRatio || 1;
+      function resize(){ canvas.width = innerWidth * dpr; canvas.height = innerHeight * dpr; }
+      resize();
+      window.addEventListener('resize', resize);
+      const particles = [];
+      const colors = ['#fda4af','#f472b6','#c084fc','#60a5fa','#34d399','#fde047'];
+      const gravity = 0.06 * dpr; // lower gravity so rockets go higher
+      const launchEvery = 120; // ms, more frequent
+      let lastLaunch = 0;
+      let start = performance.now();
+      function launch(){
+        const baseX = (Math.random()*0.8 + 0.1) * canvas.width; // from bottom area
+        const baseY = canvas.height - 2*dpr;
+        const speed = (Math.random()*2.8 + 5.0) * dpr; // faster
+        const angle = (-Math.random()*0.3 - 1.1); // steeper up
+        const vx = Math.cos(angle) * speed * (Math.random()<0.5?-1:1) * 0.12;
+        const vy = Math.sin(angle) * speed; // negative (upwards)
+        const color = colors[Math.floor(Math.random()*colors.length)];
+        particles.push({ x: baseX, y: baseY, vx, vy, life: 0, maxLife: 60 + Math.random()*30, color, explode: true });
+      }
+      function explode(x,y,color){
+        const count = 90;
+        for(let i=0;i<count;i++){
+          const a = (i/count) * Math.PI*2;
+          const sp = (Math.random()*3.2 + 3.0) * dpr; // stronger burst
+          particles.push({ x, y, vx: Math.cos(a)*sp, vy: Math.sin(a)*sp, life: 0, maxLife: 70+Math.random()*30, color, explode: false });
+        }
+      }
+      function step(t){
+        const elapsed = t - start;
+        if(elapsed - lastLaunch > launchEvery){ lastLaunch = elapsed; launch(); }
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        for(let i=particles.length-1;i>=0;i--){
+          const p = particles[i];
+          // explode when rocket reaches 90% screen height (top 10%)
+          if(p.explode && p.y <= canvas.height * 0.1){
+            explode(p.x,p.y,p.color);
+            particles.splice(i,1);
+            continue;
+          }
+          p.vy += gravity;
+          p.x += p.vx;
+          p.y += p.vy;
+          p.life++;
+          const alpha = Math.max(0, 1 - p.life / p.maxLife);
+          ctx.globalAlpha = alpha;
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 3*dpr, 0, Math.PI*2); // bigger particles
+          ctx.fill();
+          if(p.life >= p.maxLife || p.y > canvas.height + 10*dpr){ particles.splice(i,1); }
+        }
+        ctx.globalAlpha = 1;
+        if(elapsed < durationMs){ requestAnimationFrame(step); }
+        else {
+          // cleanup visual
+          fireworksCanvas.classList.add('opacity-0');
+          darken.classList.add('opacity-0');
+          setTimeout(()=>{ ctx.clearRect(0,0,canvas.width,canvas.height); darken.style.opacity=''; fireworksCanvas.style.opacity=''; }, 300);
+        }
+      }
+      // immediate first launch to avoid initial delay
+      launch();
+      requestAnimationFrame(step);
+    }
+
+    function loadFrontend(){
+      const s = readSettings();
+      nameEl.textContent = s.name ? `Chúc mừng sinh nhật, ${s.name}!` : 'Chúc mừng sinh nhật!';
+      wishEl.textContent = s.wish || 'Chúc bạn luôn vui vẻ, hạnh phúc và tràn đầy yêu thương!';
+
+      if(s.photoBase64){
+        photoEl.src = s.photoBase64;
+        photoEl.classList.remove('hidden');
+        photoPh.classList.add('hidden');
+      } else {
+        photoEl.src = '';
+        photoEl.classList.add('hidden');
+        photoPh.classList.remove('hidden');
+      }
+
+      runIntro();
+    }
+
+    // Letter modal interaction
+    // Open modal by clicking lathu.png
+    if(openWishBoxImg){
+      openWishBoxImg.addEventListener('click', () => {
+        letterModal.classList.remove('hidden');
+      });
+    }
+    if(closeLetterBtn){
+      closeLetterBtn.addEventListener('click', () => {
+        letterModal.classList.add('hidden');
+      });
+    }
+    // click backdrop to close
+    if(letterModal){
+      letterModal.addEventListener('click', (e) => {
+        if(e.target === letterModal.firstElementChild){
+          letterModal.classList.add('hidden');
+        }
+      });
+    }
+
+    // ---------- Music controls ----------
+    const playBtn = document.getElementById('playMusic');
+    const pauseBtn = document.getElementById('pauseMusic');
+    const volume = document.getElementById('volume');
+    let audio = null;
+
+    function ensureAudio(){
+      if(audio) return audio;
+      const s = readSettings();
+      if(!s.musicBase64){ return null; }
+      audio = new Audio(s.musicBase64);
+      audio.loop = true;
+      audio.volume = Number(volume.value || 0.6);
+      return audio;
+    }
+
+    playBtn.addEventListener('click', () => {
+      const a = ensureAudio();
+      if(!a){ alert('Chưa có nhạc nền. Hãy thêm trong Cài đặt.'); return; }
+      a.play();
+    });
+    pauseBtn.addEventListener('click', () => { if(audio) audio.pause(); });
+    volume.addEventListener('input', () => { if(audio) audio.volume = Number(volume.value); });
+
+    // ---------- Boot ----------
+    function boot(){
+      showView();
+      if(isAdmin()){
+        document.title = 'Birthday App - Admin';
+        initAdmin();
+      } else {
+        document.title = 'Birthday App';
+        loadFrontend();
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', boot);
+    window.addEventListener('popstate', showView);
+  </script>
+</body>
+</html>
