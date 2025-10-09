@@ -246,6 +246,84 @@
       background: #5a6268;
     }
 
+    .image-preview {
+      margin-top: 15px;
+      text-align: center;
+      padding: 15px;
+      background: #f9f9f9;
+      border-radius: 10px;
+      border: 2px dashed #ff4d6d;
+    }
+
+    .image-preview img {
+      max-width: 120px;
+      max-height: 120px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      margin: 5px;
+      object-fit: cover;
+    }
+
+    #preview-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .preview-item {
+      position: relative;
+      display: inline-block;
+    }
+
+    .preview-item .remove-single {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: #dc3545;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 25px;
+      height: 25px;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .remove-btn {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .remove-btn:hover {
+      background: #c82333;
+      transform: translateY(-1px);
+    }
+
+    input[type="file"] {
+      padding: 8px;
+      border: 2px dashed #ff4d6d;
+      border-radius: 10px;
+      background: #fff9f9;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    input[type="file"]:hover {
+      background: #fff0f0;
+      border-color: #ff3355;
+    }
+
     footer {
       text-align: center;
       margin-top: 20px;
@@ -302,9 +380,14 @@
         <div class="form-section">
           <h2>Hình ảnh đặc biệt</h2>
           <div class="input-group">
-            <label for="image-url">URL hình ảnh (tùy chọn)</label>
-            <input type="text" id="image-url" placeholder="https://example.com/image.jpg">
-            <small>Bạn có thể tải ảnh lên imgur.com và dán link vào đây</small>
+            <label for="image-upload">Tải ảnh từ máy tính (có thể chọn nhiều ảnh)</label>
+            <input type="file" id="image-upload" accept="image/*" multiple style="margin-bottom: 10px;">
+            <div id="image-preview" class="image-preview hidden">
+              <div id="preview-container"></div>
+              <button type="button" id="remove-all-images" class="remove-btn">✕ Xóa tất cả ảnh</button>
+            </div>
+            <small>Hoặc nhập URL ảnh (mỗi dòng một URL):</small>
+            <textarea id="image-urls" placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg&#10;https://example.com/image3.jpg" style="margin-top: 5px; min-height: 80px;"></textarea>
           </div>
         </div>
         
@@ -334,12 +417,8 @@
         <h1 id="display-title">Happy Valentine's Day! 💞</h1>
         <div class="valentine-name" id="display-recipient"></div>
         
-        <div class="gallery">
-          <img src="https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Couple in love">
-          <img src="https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Romantic sunset">
-          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Beautiful flowers">
-          <img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Love heart">
-          <img src="https://images.unsplash.com/photo-1542828437-c449e5e7b7c9?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Romantic dinner">
+        <div class="gallery" id="valentine-gallery">
+          <!-- Ảnh sẽ được thêm động từ dữ liệu người dùng -->
         </div>
         
         <div class="valentine-message" id="display-message"></div>
@@ -368,7 +447,11 @@
       const userNameInput = document.getElementById('user-name');
       const recipientNameInput = document.getElementById('recipient-name');
       const messageInput = document.getElementById('valentine-message');
-      const imageUrlInput = document.getElementById('image-url');
+      const imageUrlsInput = document.getElementById('image-urls');
+      const imageUploadInput = document.getElementById('image-upload');
+      const imagePreview = document.getElementById('image-preview');
+      const previewContainer = document.getElementById('preview-container');
+      const removeAllImagesBtn = document.getElementById('remove-all-images');
       
       const displayRecipient = document.getElementById('display-recipient');
       const displayMessage = document.getElementById('display-message');
@@ -399,25 +482,125 @@
       userNameInput.addEventListener('input', updatePreview);
       recipientNameInput.addEventListener('input', updatePreview);
       messageInput.addEventListener('input', updatePreview);
+
+      // Mảng lưu trữ ảnh đã upload
+      let uploadedImages = [];
+
+      // Xử lý upload nhiều ảnh
+      imageUploadInput.addEventListener('change', function(e) {
+        const files = Array.from(e.target.files);
+        
+        // Kiểm tra từng file
+        for (let file of files) {
+          if (!file.type.startsWith('image/')) {
+            alert(`File "${file.name}" không phải là ảnh hợp lệ!`);
+            continue;
+          }
+          
+          if (file.size > 5 * 1024 * 1024) {
+            alert(`Ảnh "${file.name}" quá lớn (tối đa 5MB)!`);
+            continue;
+          }
+          
+          // Đọc và thêm ảnh vào mảng
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            uploadedImages.push({
+              name: file.name,
+              data: e.target.result
+            });
+            updateImagePreview();
+          };
+          reader.readAsDataURL(file);
+        }
+        
+        // Xóa URL input khi có file upload
+        if (files.length > 0) {
+          imageUrlsInput.value = '';
+        }
+      });
+
+      // Cập nhật preview ảnh
+      function updateImagePreview() {
+        previewContainer.innerHTML = '';
+        
+        uploadedImages.forEach((image, index) => {
+          const previewItem = document.createElement('div');
+          previewItem.className = 'preview-item';
+          previewItem.innerHTML = `
+            <img src="${image.data}" alt="${image.name}">
+            <button type="button" class="remove-single" onclick="removeImage(${index})">✕</button>
+          `;
+          previewContainer.appendChild(previewItem);
+        });
+        
+        if (uploadedImages.length > 0) {
+          imagePreview.classList.remove('hidden');
+        } else {
+          imagePreview.classList.add('hidden');
+        }
+      }
+
+      // Xóa ảnh đơn lẻ
+      window.removeImage = function(index) {
+        uploadedImages.splice(index, 1);
+        updateImagePreview();
+      };
+
+      // Xóa tất cả ảnh
+      removeAllImagesBtn.addEventListener('click', function() {
+        imageUploadInput.value = '';
+        uploadedImages = [];
+        updateImagePreview();
+      });
+
+      // Khi nhập URL, xóa file upload
+      imageUrlsInput.addEventListener('input', function() {
+        if (this.value.trim()) {
+          imageUploadInput.value = '';
+          uploadedImages = [];
+          updateImagePreview();
+        }
+      });
       
       // Tạo Valentine
       createBtn.addEventListener('click', function() {
         const userName = userNameInput.value.trim();
         const recipientName = recipientNameInput.value.trim();
         const message = messageInput.value.trim();
-        const imageUrl = imageUrlInput.value.trim();
+        const imageUrls = imageUrlsInput.value.trim();
         
         if (!userName || !recipientName || !message) {
           alert('Vui lòng điền đầy đủ thông tin!');
           return;
         }
         
+        // Thu thập tất cả ảnh
+        let allImages = [];
+        
+        // Thêm ảnh đã upload
+        if (uploadedImages.length > 0) {
+          allImages = uploadedImages.map(img => img.data);
+        }
+        
+        // Thêm ảnh từ URL
+        if (imageUrls) {
+          const urls = imageUrls.split('\n').filter(url => url.trim());
+          allImages = allImages.concat(urls);
+        }
+        
+        // Tạo Valentine với tất cả ảnh
+        createValentineWithImages(userName, recipientName, message, allImages);
+      });
+
+      // Function tạo Valentine với nhiều ảnh
+      function createValentineWithImages(userName, recipientName, message, images) {
         // Tạo dữ liệu Valentine
         const valentineData = {
           u: userName,
           r: recipientName,
           m: message,
-          i: imageUrl
+          images: images
         };
         
         // Mã hóa dữ liệu thành chuỗi base64
@@ -430,7 +613,7 @@
         creationSection.classList.add('hidden');
         shareSection.classList.remove('hidden');
         shareLink.textContent = shareUrl;
-      });
+      }
       
       // Sao chép link
       copyBtn.addEventListener('click', function() {
@@ -452,7 +635,10 @@
         userNameInput.value = '';
         recipientNameInput.value = '';
         messageInput.value = '';
-        imageUrlInput.value = '';
+        imageUrlsInput.value = '';
+        imageUploadInput.value = '';
+        uploadedImages = [];
+        updateImagePreview();
         updatePreview();
       });
       
@@ -465,7 +651,10 @@
         userNameInput.value = '';
         recipientNameInput.value = '';
         messageInput.value = '';
-        imageUrlInput.value = '';
+        imageUrlsInput.value = '';
+        imageUploadInput.value = '';
+        uploadedImages = [];
+        updateImagePreview();
         updatePreview();
       });
       
@@ -485,23 +674,39 @@
           shareSection.classList.add('hidden');
           valentineDisplay.classList.remove('hidden');
           
-          // Nếu có ảnh, thêm vào gallery
-          if (valentineData.i) {
-            const gallery = document.querySelector('.gallery');
-            const newImage = document.createElement('img');
-            newImage.src = valentineData.i;
-            newImage.alt = 'Ảnh cá nhân hóa';
-            gallery.appendChild(newImage);
-            
-            // Thêm CSS animation cho ảnh mới
+          // Hiển thị ảnh trong gallery
+          const gallery = document.getElementById('valentine-gallery');
+          gallery.innerHTML = '';
+          
+          // Lấy danh sách ảnh (hỗ trợ cả format cũ và mới)
+          let images = [];
+          if (valentineData.images && Array.isArray(valentineData.images)) {
+            images = valentineData.images;
+          } else if (valentineData.i) {
+            images = [valentineData.i];
+          }
+          
+          // Thêm từng ảnh vào gallery
+          images.forEach((imageSrc, index) => {
+            const img = document.createElement('img');
+            img.src = imageSrc;
+            img.alt = `Ảnh ${index + 1}`;
+            gallery.appendChild(img);
+          });
+          
+          // Thêm CSS animation cho các ảnh
+          if (images.length > 0) {
             const style = document.createElement('style');
-            const totalImages = document.querySelectorAll('.gallery img').length;
-            style.textContent = `
-              .gallery > img:nth-child(${totalImages}) {
-                animation-delay: calc(-${(totalImages-1)*0.2}*var(--d));
-                --r: ${(totalImages % 2 === 0 ? -1 : 1) * (5 + totalImages * 3)}deg;
-              }
-            `;
+            let cssText = '';
+            images.forEach((_, index) => {
+              cssText += `
+                .gallery > img:nth-child(${index + 1}) {
+                  animation-delay: calc(-${index * 0.2}*var(--d));
+                  --r: ${(index % 2 === 0 ? -1 : 1) * (5 + index * 3)}deg;
+                }
+              `;
+            });
+            style.textContent = cssText;
             document.head.appendChild(style);
           }
         } catch (error) {
