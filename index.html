@@ -172,6 +172,55 @@
       background: #45a049;
     }
 
+    .hosting-info {
+      margin-top: 30px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 15px;
+      border-left: 5px solid #ff4d6d;
+    }
+
+    .hosting-info h3 {
+      color: #ff4d6d;
+      margin-bottom: 15px;
+      font-size: 1.2rem;
+    }
+
+    .hosting-options {
+      display: grid;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .option {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .option strong {
+      color: #ff4d6d;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .option p {
+      margin: 0;
+      line-height: 1.5;
+      color: #555;
+    }
+
+    .note {
+      background: #fff3cd;
+      border: 1px solid #ffeaa7;
+      padding: 12px;
+      border-radius: 8px;
+      margin: 0;
+      color: #856404;
+      font-size: 0.9rem;
+    }
+
     .valentine-display {
       text-align: center;
       padding: 30px;
@@ -408,6 +457,33 @@
           <p>Chia sẻ link này với người ấy:</p>
           <div class="share-link" id="share-link">Link sẽ xuất hiện ở đây</div>
           <button id="copy-btn" class="btn copy-btn">Sao chép Link</button>
+          
+          <div class="hosting-info">
+            <h3>📤 Cách chia sẻ link cho người khác:</h3>
+            <div class="hosting-options">
+              <div class="option">
+                <strong>1. GitHub Pages (Miễn phí)</strong>
+                <p>• Tạo tài khoản GitHub.com<br>
+                • Tạo repository mới<br>
+                • Upload file index.html<br>
+                • Bật GitHub Pages trong Settings</p>
+              </div>
+              <div class="option">
+                <strong>2. Netlify (Dễ nhất)</strong>
+                <p>• Truy cập netlify.com<br>
+                • Kéo thả file index.html<br>
+                • Nhận link ngay lập tức</p>
+              </div>
+              <div class="option">
+                <strong>3. Vercel</strong>
+                <p>• Truy cập vercel.com<br>
+                • Upload file hoặc kết nối GitHub<br>
+                • Deploy tự động</p>
+              </div>
+            </div>
+            <p class="note">💡 <strong>Lưu ý:</strong> Link hiện tại chỉ hoạt động trên máy bạn. Cần upload lên web server để chia sẻ!</p>
+          </div>
+          
           <button id="new-valentine" class="btn back-btn">Tạo Valentine Mới</button>
         </div>
       </div>
