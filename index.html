@@ -509,6 +509,7 @@
       background: #c82333;
     }
 
+
     footer {
       text-align: center;
       margin-top: 20px;
@@ -641,33 +642,7 @@
           <p>Chia sẻ link này với người ấy:</p>
           <div class="share-link" id="share-link">Link sẽ xuất hiện ở đây</div>
           <button id="copy-btn" class="btn copy-btn">Sao chép Link</button>
-          
-          <div class="hosting-info">
-            <h3>📤 Cách chia sẻ link cho người khác:</h3>
-            <div class="hosting-options">
-              <div class="option">
-                <strong>1. GitHub Pages (Miễn phí)</strong>
-                <p>• Tạo tài khoản GitHub.com<br>
-                • Tạo repository mới<br>
-                • Upload file index.html<br>
-                • Bật GitHub Pages trong Settings</p>
-              </div>
-              <div class="option">
-                <strong>2. Netlify (Dễ nhất)</strong>
-                <p>• Truy cập netlify.com<br>
-                • Kéo thả file index.html<br>
-                • Nhận link ngay lập tức</p>
-              </div>
-              <div class="option">
-                <strong>3. Vercel</strong>
-                <p>• Truy cập vercel.com<br>
-                • Upload file hoặc kết nối GitHub<br>
-                • Deploy tự động</p>
-              </div>
-            </div>
-            <p class="note">💡 <strong>Lưu ý:</strong> Link hiện tại chỉ hoạt động trên máy bạn. Cần upload lên web server để chia sẻ!</p>
-          </div>
-          
+
           <button id="new-valentine" class="btn back-btn">Tạo Valentine Mới</button>
         </div>
       </div>
@@ -683,8 +658,6 @@
         
         <div class="valentine-message" id="display-message"></div>
         <p id="display-sender" style="font-style: italic; margin-top: 20px;"></p>
-        
-        <button id="back-to-creation" class="btn back-btn">Tạo Valentine Mới</button>
       </div>
     </div>
   </div>
@@ -701,7 +674,6 @@
       const createBtn = document.getElementById('create-btn');
       const copyBtn = document.getElementById('copy-btn');
       const newValentineBtn = document.getElementById('new-valentine');
-      const backToCreationBtn = document.getElementById('back-to-creation');
       const shareLink = document.getElementById('share-link');
       
       const userNameInput = document.getElementById('user-name');
@@ -747,19 +719,29 @@
       // Cấu hình Cloudinary Upload Widget
       const cloudinaryWidget = cloudinary.createUploadWidget({
         cloudName: 'dyk8aumyf',
-        uploadPreset: 'ml_default', // Bạn cần tạo upload preset trong Cloudinary
+        uploadPreset: 'ml_default', // Upload preset cần được tạo trong Cloudinary Dashboard
         sources: ['local', 'url', 'camera'],
         multiple: true,
         maxFiles: 10,
         cropping: true,
         showAdvancedOptions: true,
         folder: 'valentine-images',
-        resourceType: 'image'
+        resourceType: 'image',
+        clientAllowedFormats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
+        maxImageFileSize: 10000000, // 10MB
+        theme: 'minimal'
       }, (error, result) => {
-        if (!error && result && result.event === "success") {
+        if (error) {
+          console.error('Upload error:', error);
+          alert('Lỗi upload: ' + error.message + '\n\nVui lòng kiểm tra Upload Preset trong Cloudinary Dashboard!');
+          return;
+        }
+        
+        if (result && result.event === "success") {
           // Thêm ảnh đã upload vào danh sách
           uploadedCloudinaryImages.push(result.info.secure_url);
           updateSelectedImages();
+          console.log('Upload successful:', result.info.secure_url);
         }
       });
 
@@ -893,24 +875,6 @@
         updatePreview();
       });
       
-      // Quay lại tạo Valentine mới
-      backToCreationBtn.addEventListener('click', function() {
-        valentineDisplay.classList.add('hidden');
-        creationSection.classList.remove('hidden');
-        
-        // Reset form
-        userNameInput.value = '';
-        recipientNameInput.value = '';
-        messageInput.value = '';
-        
-        // Bỏ chọn tất cả ảnh
-        imageCheckboxes.forEach(checkbox => {
-          checkbox.checked = false;
-        });
-        uploadedCloudinaryImages = [];
-        updateSelectedImages();
-        updatePreview();
-      });
       
       // Hiển thị trang Valentine
       function showValentineDisplay(encodedData) {
