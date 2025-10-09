@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tạo Valentine Cá Nhân Hóa</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      color: #333;
+    }
+
+    .container {
+      max-width: 800px;
+      width: 100%;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
+
+    header {
+      background: #ff4d6d;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+
+    .content {
+      padding: 30px;
+    }
+
+    .form-section {
+      margin-bottom: 30px;
+    }
+
+    h2 {
+      color: #ff4d6d;
+      margin-bottom: 15px;
+      font-size: 1.5rem;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #555;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+
+    input:focus, textarea:focus {
+      border-color: #ff4d6d;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .btn {
+      background: #ff4d6d;
+      color: white;
+      border: none;
+      padding: 14px 30px;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: block;
+      margin: 0 auto;
+      box-shadow: 0 4px 15px rgba(255, 77, 109, 0.3);
+    }
+
+    .btn:hover {
+      background: #ff3355;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 77, 109, 0.4);
+    }
+
+    .preview-section {
+      background: #f9f9f9;
+      padding: 25px;
+      border-radius: 15px;
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .preview-title {
+      color: #ff4d6d;
+      margin-bottom: 15px;
+    }
+
+    .preview-content {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+      margin-bottom: 20px;
+    }
+
+    .preview-image {
+      max-width: 100%;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .share-section {
+      text-align: center;
+      margin-top: 20px;
+      padding: 20px;
+      background: #f0f8ff;
+      border-radius: 15px;
+    }
+
+    .share-link {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      margin: 15px 0;
+      word-break: break-all;
+      font-family: monospace;
+      border: 2px dashed #ff4d6d;
+    }
+
+    .copy-btn {
+      background: #4CAF50;
+      margin-top: 10px;
+    }
+
+    .copy-btn:hover {
+      background: #45a049;
+    }
+
+    .valentine-display {
+      text-align: center;
+      padding: 30px;
+    }
+
+    .valentine-name {
+      font-size: 2.5rem;
+      color: #ff4d6d;
+      margin: 20px 0;
+    }
+
+    .valentine-message {
+      font-size: 1.2rem;
+      line-height: 1.6;
+      margin: 20px 0;
+      padding: 20px;
+      background: #fff9f9;
+      border-radius: 15px;
+      border-left: 5px solid #ff4d6d;
+    }
+
+    .gallery {
+      --d: 10s;
+      display: grid;
+      place-items: center;
+      width: 220px;
+      margin: 30px auto;
+    }
+
+    .gallery > img {
+      grid-area: 1/1;
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border: 10px solid #f2f2f2;
+      box-shadow: 0 0 4px #0007;
+      z-index: 2;
+      animation: slide var(--d) infinite, z-order var(--d) infinite steps(1);
+    }
+
+    .gallery img:last-child {
+      animation-name: slide, z-order-last;
+    }
+
+    .gallery > img:nth-child(1) { animation-delay: calc(0*var(--d)); --r: 16deg; }
+    .gallery > img:nth-child(2) { animation-delay: calc(-0.2*var(--d)); --r: -1deg; }
+    .gallery > img:nth-child(3) { animation-delay: calc(-0.4*var(--d)); --r: -19deg; }
+    .gallery > img:nth-child(4) { animation-delay: calc(-0.6*var(--d)); --r: 6deg; }
+    .gallery > img:nth-child(5) { animation-delay: calc(-0.8*var(--d)); --r: -8deg; }
+
+    @keyframes slide {
+      10% { transform: translateX(120%) rotate(var(--r)); }
+      0%, 100%, 20% { transform: translateX(0%) rotate(var(--r)); }
+    }
+
+    @keyframes z-order {
+      10%, 20% { z-index: 1; }
+      80% { z-index: 2; }
+    }
+
+    @keyframes z-order-last {
+      10%, 20% { z-index: 1; }
+      90% { z-index: 2; }
+    }
+
+    .back-btn {
+      background: #6c757d;
+      margin-top: 20px;
+    }
+
+    .back-btn:hover {
+      background: #5a6268;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 20px;
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    @media only screen and (max-width: 600px) {
+      h1 {
+        font-size: 1.8rem;
+      }
+      
+      .content {
+        padding: 20px;
+      }
+      
+      .gallery {
+        width: 150px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>💖 Valentine Cá Nhân Hóa 💖</h1>
+      <p class="subtitle">Tạo trang Valentine đặc biệt dành cho người ấy</p>
+    </header>
+    
+    <div class="content">
+      <!-- Form tạo Valentine -->
+      <div id="creation-section">
+        <div class="form-section">
+          <h2>Thông tin của bạn</h2>
+          <div class="input-group">
+            <label for="user-name">Tên của bạn</label>
+            <input type="text" id="user-name" placeholder="Nhập tên của bạn">
+          </div>
+          
+          <div class="input-group">
+            <label for="recipient-name">Tên người nhận</label>
+            <input type="text" id="recipient-name" placeholder="Nhập tên người bạn yêu thương">
+          </div>
+        </div>
+        
+        <div class="form-section">
+          <h2>Lời nhắn yêu thương</h2>
+          <div class="input-group">
+            <label for="valentine-message">Lời chúc Valentine</label>
+            <textarea id="valentine-message" placeholder="Viết lời chúc từ trái tim của bạn..."></textarea>
+          </div>
+        </div>
+        
+        <div class="form-section">
+          <h2>Hình ảnh đặc biệt</h2>
+          <div class="input-group">
+            <label for="image-url">URL hình ảnh (tùy chọn)</label>
+            <input type="text" id="image-url" placeholder="https://example.com/image.jpg">
+            <small>Bạn có thể tải ảnh lên imgur.com và dán link vào đây</small>
+          </div>
+        </div>
+        
+        <button id="create-btn" class="btn">Tạo Valentine Của Tôi</button>
+        
+        <div class="preview-section">
+          <h3 class="preview-title">Xem trước</h3>
+          <div class="preview-content">
+            <p id="preview-text">Sau khi nhập thông tin, bạn sẽ thấy xem trước tại đây</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Phần chia sẻ link -->
+      <div id="share-section" class="hidden">
+        <div class="share-section">
+          <h2>Valentine của bạn đã sẵn sàng!</h2>
+          <p>Chia sẻ link này với người ấy:</p>
+          <div class="share-link" id="share-link">Link sẽ xuất hiện ở đây</div>
+          <button id="copy-btn" class="btn copy-btn">Sao chép Link</button>
+          <button id="new-valentine" class="btn back-btn">Tạo Valentine Mới</button>
+        </div>
+      </div>
+      
+      <!-- Phần hiển thị Valentine -->
+      <div id="valentine-display" class="valentine-display hidden">
+        <h1 id="display-title">Happy Valentine's Day! 💞</h1>
+        <div class="valentine-name" id="display-recipient"></div>
+        
+        <div class="gallery">
+          <img src="https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Couple in love">
+          <img src="https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Romantic sunset">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Beautiful flowers">
+          <img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Love heart">
+          <img src="https://images.unsplash.com/photo-1542828437-c449e5e7b7c9?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Romantic dinner">
+        </div>
+        
+        <div class="valentine-message" id="display-message"></div>
+        <p id="display-sender" style="font-style: italic; margin-top: 20px;"></p>
+        
+        <button id="back-to-creation" class="btn back-btn">Tạo Valentine Mới</button>
+      </div>
+    </div>
+  </div>
+  
+  <footer>
+    <p>Made with ❤️ | Chia sẻ tình yêu của bạn đến mọi người</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const creationSection = document.getElementById('creation-section');
+      const shareSection = document.getElementById('share-section');
+      const valentineDisplay = document.getElementById('valentine-display');
+      const createBtn = document.getElementById('create-btn');
+      const copyBtn = document.getElementById('copy-btn');
+      const newValentineBtn = document.getElementById('new-valentine');
+      const backToCreationBtn = document.getElementById('back-to-creation');
+      const shareLink = document.getElementById('share-link');
+      
+      const userNameInput = document.getElementById('user-name');
+      const recipientNameInput = document.getElementById('recipient-name');
+      const messageInput = document.getElementById('valentine-message');
+      const imageUrlInput = document.getElementById('image-url');
+      
+      const displayRecipient = document.getElementById('display-recipient');
+      const displayMessage = document.getElementById('display-message');
+      const displaySender = document.getElementById('display-sender');
+      const previewText = document.getElementById('preview-text');
+      
+      // Kiểm tra xem có tham số URL không (trang hiển thị Valentine)
+      const urlParams = new URLSearchParams(window.location.search);
+      const valentineData = urlParams.get('data');
+      
+      if (valentineData) {
+        // Hiển thị trang Valentine
+        showValentineDisplay(valentineData);
+      }
+      
+      // Cập nhật preview
+      function updatePreview() {
+        const userName = userNameInput.value || 'Bạn';
+        const recipientName = recipientNameInput.value || 'Người ấy';
+        const message = messageInput.value || 'Lời chúc từ trái tim...';
+        
+        previewText.innerHTML = `
+          <strong>${userName}</strong> gửi đến <strong>${recipientName}</strong>:<br><br>
+          "${message.substring(0, 100)}${message.length > 100 ? '...' : ''}"
+        `;
+      }
+      
+      userNameInput.addEventListener('input', updatePreview);
+      recipientNameInput.addEventListener('input', updatePreview);
+      messageInput.addEventListener('input', updatePreview);
+      
+      // Tạo Valentine
+      createBtn.addEventListener('click', function() {
+        const userName = userNameInput.value.trim();
+        const recipientName = recipientNameInput.value.trim();
+        const message = messageInput.value.trim();
+        const imageUrl = imageUrlInput.value.trim();
+        
+        if (!userName || !recipientName || !message) {
+          alert('Vui lòng điền đầy đủ thông tin!');
+          return;
+        }
+        
+        // Tạo dữ liệu Valentine
+        const valentineData = {
+          u: userName,
+          r: recipientName,
+          m: message,
+          i: imageUrl
+        };
+        
+        // Mã hóa dữ liệu thành chuỗi base64
+        const encodedData = btoa(JSON.stringify(valentineData));
+        
+        // Tạo link chia sẻ
+        const shareUrl = `${window.location.origin}${window.location.pathname}?data=${encodedData}`;
+        
+        // Hiển thị phần chia sẻ
+        creationSection.classList.add('hidden');
+        shareSection.classList.remove('hidden');
+        shareLink.textContent = shareUrl;
+      });
+      
+      // Sao chép link
+      copyBtn.addEventListener('click', function() {
+        navigator.clipboard.writeText(shareLink.textContent)
+          .then(() => {
+            alert('Đã sao chép link vào clipboard!');
+          })
+          .catch(err => {
+            console.error('Lỗi khi sao chép: ', err);
+          });
+      });
+      
+      // Tạo Valentine mới
+      newValentineBtn.addEventListener('click', function() {
+        shareSection.classList.add('hidden');
+        creationSection.classList.remove('hidden');
+        
+        // Reset form
+        userNameInput.value = '';
+        recipientNameInput.value = '';
+        messageInput.value = '';
+        imageUrlInput.value = '';
+        updatePreview();
+      });
+      
+      // Quay lại tạo Valentine mới
+      backToCreationBtn.addEventListener('click', function() {
+        valentineDisplay.classList.add('hidden');
+        creationSection.classList.remove('hidden');
+        
+        // Reset form
+        userNameInput.value = '';
+        recipientNameInput.value = '';
+        messageInput.value = '';
+        imageUrlInput.value = '';
+        updatePreview();
+      });
+      
+      // Hiển thị trang Valentine
+      function showValentineDisplay(encodedData) {
+        try {
+          // Giải mã dữ liệu
+          const valentineData = JSON.parse(atob(encodedData));
+          
+          // Hiển thị thông tin
+          displayRecipient.textContent = valentineData.r;
+          displayMessage.textContent = valentineData.m;
+          displaySender.textContent = `From: ${valentineData.u} ❤️`;
+          
+          // Ẩn phần tạo và hiển thị phần Valentine
+          creationSection.classList.add('hidden');
+          shareSection.classList.add('hidden');
+          valentineDisplay.classList.remove('hidden');
+          
+          // Nếu có ảnh, thêm vào gallery
+          if (valentineData.i) {
+            const gallery = document.querySelector('.gallery');
+            const newImage = document.createElement('img');
+            newImage.src = valentineData.i;
+            newImage.alt = 'Ảnh cá nhân hóa';
+            gallery.appendChild(newImage);
+            
+            // Thêm CSS animation cho ảnh mới
+            const style = document.createElement('style');
+            const totalImages = document.querySelectorAll('.gallery img').length;
+            style.textContent = `
+              .gallery > img:nth-child(${totalImages}) {
+                animation-delay: calc(-${(totalImages-1)*0.2}*var(--d));
+                --r: ${(totalImages % 2 === 0 ? -1 : 1) * (5 + totalImages * 3)}deg;
+              }
+            `;
+            document.head.appendChild(style);
+          }
+        } catch (error) {
+          console.error('Lỗi khi giải mã dữ liệu:', error);
+          alert('Link Valentine không hợp lệ!');
+        }
+      }
+    });
+  </script>
+</body>
+</html>
