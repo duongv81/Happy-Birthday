@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE be
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
@@ -290,22 +290,74 @@
       filter: drop-shadow(0 20px 40px rgba(0,0,0,0.35));
       z-index: 3;
     }
-    .image-preview-group {
+
+    /* GALLERY STYLES (Được lấy từ untitled (1).html) */
+    .photo-gallery {
+      /* Thay thế image-preview-group cũ */
+      --d: 10s; /* Thời gian animation */
+      display: grid;
+      place-items: center;
+      width: 250px; /* Kích thước tổng thể của khu vực gallery */
+      height: 300px;
       margin-left: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      z-index: 10;
+      position: relative;
     }
-    .preview-image {
-      width: 200px;
-      height: 150px;
+    
+    /* Ảnh cố định (Fixed images - Ảnh 1 & 2) */
+    .photo-gallery > img.static-image {
+        grid-area: 1/1;
+        width: 100%;
+        aspect-ratio: 1;
+        object-fit: cover;
+        border: 10px solid #f2f2f2; /* Khung viền */
+        box-shadow: 0 0 4px #0007; 
+        z-index: 3; /* Cao hơn ảnh động */
+        opacity: 1; 
+        transform: rotate(var(--r, 0deg)); /* Chỉ áp dụng góc quay nhẹ tĩnh */
+        /* Đảm bảo không có animation slide/z-order cho ảnh tĩnh */
+        animation: none;
+    }
+
+    .photo-gallery > img.dynamic-image {
+      /* Ảnh riêng lẻ (Ảnh 3 trở đi) */
+      grid-area: 1/1;
+      width: 100%;
+      aspect-ratio: 1;
       object-fit: cover;
-      border-radius: 10px;
-      margin-bottom: 20px;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-      transition: transform 0.3s;
+      
+      /* Khung viền và đổ bóng */
+      border: 10px solid #f2f2f2; /* Viền trắng */
+      box-shadow: 0 0 4px #0007; /* Đổ bóng nhẹ */
+      
+      z-index: 2;
+      animation: slide var(--d) infinite, z-order var(--d) infinite steps(1);
+      opacity: 0; /* Mặc định ẩn, sẽ được hiển thị bằng JS */
+      transition: opacity 0.5s;
     }
+    
+    .photo-gallery > img.visible {
+        opacity: 1; /* Hiển thị ảnh khi được JS thêm vào */
+    }
+
+    /* Keyframes được copy từ untitled (1).html */
+    @keyframes slide {
+      /* 10% (xuất hiện bên phải), 0%, 100%, 20% (vị trí trung tâm) */
+      10% { transform: translateX(120%) rotate(var(--r)); }
+      0%, 100%, 20% { transform: translateX(0%) rotate(var(--r)); }
+    }
+
+    @keyframes z-order {
+      /* Khi ảnh không hiển thị/đang di chuyển (10%-20%), z-index thấp hơn */
+      10%, 20% { z-index: 1; }
+      80% { z-index: 2; }
+    }
+
+    @keyframes z-order-last {
+      /* Điều chỉnh cho ảnh cuối cùng nếu cần, nhưng dùng chung z-order là tốt nhất */
+      10%, 20% { z-index: 1; }
+      90% { z-index: 2; }
+    }
+
 
     /* 4. Phần Lá thư (Đã chỉnh sửa theo yêu cầu) */
     #letterContainerStatic {
@@ -509,9 +561,8 @@
         .cake-content {
             flex-direction: column;
         }
-        .image-preview-group {
-            margin-left: 0;
-            margin-top: 20px;
+        .photo-gallery {
+            margin: 30px 0 0 0;
         }
     }
   </style>
@@ -624,6 +675,7 @@
             <div id="display-recipient" class="recipient-name-display"></div>
             <div class="cake-content">
                 <div class="relative flex justify-center items-center">
+                    <!-- SỬA ĐƯỜNG DẪN ẢNH BÁNH KEM -->
                     <img src="hinhanh/banhkem.png" alt="Bánh kem" class="cake">
                     <!-- Lá thư tĩnh (Left, -15deg, Overlapping) -->
                     <div id="letterContainerStatic" class="relative">
@@ -635,7 +687,8 @@
                     </div>
                 </div>
                 
-                <div class="image-preview-group" id="imagePreviewGroup">
+                <!-- Thay thế #imagePreviewGroup bằng photo-gallery -->
+                <div class="photo-gallery" id="photoGallery">
                     <!-- Ảnh sẽ được JS chèn vào đây -->
                 </div>
             </div>
@@ -699,7 +752,9 @@
       const countdownElement = document.getElementById('countdown');
       const letterContainerStatic = document.getElementById('letterContainerStatic');
       const displayRecipient = document.getElementById('display-recipient');
-      const imagePreviewGroup = document.getElementById('imagePreviewGroup');
+      
+      // MODIFIED: Thay thế imagePreviewGroup
+      const photoGallery = document.getElementById('photoGallery'); 
 
       // Modal Letter Elements (MODIFIED)
       const letterModal = document.getElementById('letter-modal');
@@ -783,9 +838,6 @@
       uploadMusicBtn.addEventListener('click', () => cloudinaryWidgetMusic.open());
 
 
-      // Xử lý chọn ảnh từ checkbox (ĐÃ XÓA CHECKBOX)
-      // KHÔNG CẦN imageCheckboxes.forEach...
-
       // Cập nhật preview ảnh đã chọn (Giữ nguyên logic từ 2222.html)
       function updateSelectedImages() {
         const selectedImages = [];
@@ -845,30 +897,27 @@
       recipientNameInput.addEventListener('input', updatePreview);
       messageInput.addEventListener('input', updatePreview);
 
-      // Tạo Birthday (ĐÃ SỬA: Thêm Music URL)
+      // Tạo Birthday (Giữ nguyên)
       createBtn.addEventListener('click', function() {
+        // Lấy giá trị, sử dụng chuỗi rỗng nếu không có
         const userName = userNameInput.value.trim();
         const recipientName = recipientNameInput.value.trim();
         const message = messageInput.value.trim();
         
-        if (!userName || !recipientName || !message) {
-          alert('Vui lòng điền đầy đủ thông tin!');
-          return;
-        }
-        
         const selectedImages = uploadedCloudinaryImages;
         
-        if (selectedImages.length === 0) {
-          alert('Vui lòng upload ít nhất một ảnh!');
-          return;
-        }
+        // SỬ DỤNG GIÁ TRỊ MẶC ĐỊNH CHO THIẾT KẾ HIỂN THỊ
+        const finalUserName = userName || 'Người Gửi Ẩn Danh';
+        const finalRecipientName = recipientName || 'Người Đặc Biệt';
+        const finalMessage = message || 'Chúc mừng sinh nhật! Mong rằng ngày hôm nay của bạn sẽ tràn ngập niềm vui và hạnh phúc.';
+
         
         const valentineData = { 
-            userName, 
-            recipientName, 
-            message, 
+            userName: finalUserName, 
+            recipientName: finalRecipientName, 
+            message: finalMessage, 
             images: selectedImages,
-            musicUrl: uploadedMusicUrl // NEW: Thêm URL nhạc
+            musicUrl: uploadedMusicUrl
         };
         
         const jsonString = JSON.stringify(valentineData);
@@ -903,7 +952,7 @@
         window.location.reload();
       });
       
-      // --- LOGIC HIỂN THỊ HIỆU ỨNG (ĐÃ SỬA: Thêm Music Logic) ---
+      // --- LOGIC HIỂN THỊ HIỆU ỨNG ---
       
       function showBirthdayFlow(encodedData) {
         try {
@@ -914,8 +963,12 @@
           // 1. Chuẩn bị nội dung
           displayRecipient.textContent = `Happy Birthday, ${currentValentineData.recipientName}!`;
           letterContentMessage.innerHTML = currentValentineData.message.replace(/\n/g, '<br>');
-          if (currentValentineData.images[0]) {
+          
+          // Ẩn ảnh trong thư nếu không có ảnh, nếu có thì đặt ảnh đầu tiên
+          if (currentValentineData.images.length > 0) { 
             letterContentImage.src = currentValentineData.images[0];
+          } else {
+            letterContentImage.style.display = 'none'; 
           }
 
           // NEW: Thiết lập nhạc nền
@@ -923,15 +976,38 @@
               backgroundMusic.src = currentValentineData.musicUrl;
           }
 
-          // 2. Chèn các ảnh nhỏ vào cảnh bánh kem
-          imagePreviewGroup.innerHTML = '';
-          currentValentineData.images.slice(0, 3).forEach((imgSrc, index) => {
+          // 2. Chèn tất cả ảnh vào Gallery (ĐÃ SỬA ĐỔI LOGIC TĨNH/ĐỘNG)
+          photoGallery.innerHTML = '';
+          currentValentineData.images.forEach((imgSrc, index) => {
               const img = document.createElement('img');
               img.src = imgSrc;
               img.alt = `Ảnh ${index + 1}`;
-              img.className = 'preview-image';
-              img.style.transform = `rotate(${Math.random() * 10 - 5}deg)`; 
-              imagePreviewGroup.appendChild(img);
+              img.classList.add('visible'); // Đánh dấu là hiển thị
+
+              // LOGIC PHÂN BIỆT ẢNH TĨNH VÀ ẢNH ĐỘNG
+              if (index < 2) {
+                  // Ảnh 1 và 2 (index 0 và 1) là ảnh tĩnh
+                  img.classList.add('static-image');
+                  
+                  // Áp dụng góc xoay tĩnh ngẫu nhiên nhẹ (để chúng không hoàn toàn thẳng đứng)
+                  const staticRotation = (index === 0 ? -1 : 1) * (5 + index * 3);
+                  img.style.setProperty('--r', `${staticRotation}deg`);
+                  // Tăng z-index của ảnh 1, 2 để chúng luôn nằm trên ảnh động
+                  img.style.zIndex = 4 + index; 
+
+              } else {
+                  // Ảnh 3 trở đi (index >= 2) là ảnh động xoay
+                  img.classList.add('dynamic-image');
+                  
+                  // ÁP DỤNG THUỘC TÍNH CSS ĐỘNG CHO HIỆU ỨNG XOAY
+                  const delay = -((index - 2) * 0.2); // Bắt đầu tính delay từ ảnh thứ 3
+                  const rotation = (index % 2 === 0 ? -1 : 1) * (5 + index * 3);
+                  
+                  img.style.setProperty('--r', `${rotation}deg`);
+                  img.style.animationDelay = `calc(${delay} * var(--d))`;
+              }
+
+              photoGallery.appendChild(img);
           });
           
           // 3. Khởi chạy luồng animation
