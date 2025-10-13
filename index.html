@@ -8,7 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    /* Global Styles from 2222.html */
+    /* Global Styles */
     * {
       margin: 0;
       padding: 0;
@@ -24,7 +24,7 @@
       align-items: center;
       padding: 20px;
       color: #333;
-      overflow-x: hidden; /* Ngăn cuộn ngang */
+      overflow-x: hidden;
     }
 
     .container {
@@ -35,7 +35,7 @@
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
       overflow: hidden;
       margin-bottom: 30px;
-      z-index: 50; /* Giữ form trên nền */
+      z-index: 50;
     }
 
     header {
@@ -60,8 +60,38 @@
     }
     
     .hidden { display: none !important; }
+    /* Loading Indicator Styles */
+    #loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 1.5rem;
+        z-index: 3000;
+        backdrop-filter: blur(4px);
+    }
+    .spinner {
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        border-top: 4px solid #ff4d6d;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin-right: 15px;
+    }
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
 
-    /* --- Form Styles (Cải thiện) --- */
+
+    /* --- Form Styles --- */
     .form-section {
         margin-bottom: 30px;
     }
@@ -91,16 +121,16 @@
     input:focus, textarea:focus {
         border-color: #ff4d6d;
         outline: none;
-        box-shadow: 0 0 0 3px rgba(255, 77, 109, 0.2); /* Đổ bóng nhẹ khi focus */
+        box-shadow: 0 0 0 3px rgba(255, 77, 109, 0.2);
     }
     textarea {
         min-height: 120px;
         resize: vertical;
     }
     
-    /* Button Styles (Cải thiện) */
+    /* Button Styles */
     .btn {
-        background: #ff4d6d;
+        background: #28a745;
         color: white;
         border: none;
         padding: 14px 30px;
@@ -110,27 +140,20 @@
         cursor: pointer;
         transition: all 0.3s;
         display: block;
-        margin: 0 auto 10px; /* Thêm margin bottom */
-        box-shadow: 0 4px 15px rgba(255, 77, 109, 0.3);
+        margin: 0 auto 10px;
+        box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
     }
     .btn:hover {
-        background: #ff3355;
+        background: #218838;
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(255, 77, 109, 0.4);
+        box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
     }
     .btn:active {
         transform: translateY(0);
-        box-shadow: 0 2px 10px rgba(255, 77, 109, 0.3);
+        box-shadow: 0 2px 10px rgba(40, 167, 69, 0.3);
     }
-    .upload-btn {
-        background: #28a745;
-        box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
-    }
-    .upload-btn:hover {
-        background: #218838;
-        box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
-    }
-    .copy-btn {
+
+     .copy-btn {
         background: #007bff;
         box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
     }
@@ -146,9 +169,37 @@
         background: #5a6268;
         box-shadow: 0 6px 20px rgba(108, 117, 125, 0.4);
     }
+    .start-btn { 
+        background: #ffd700;
+        color: #333;
+        font-size: 1.5rem;
+        padding: 20px 40px;
+        box-shadow: 0 4px 20px rgba(255, 215, 0, 0.5);
+    }
+    .start-btn:hover {
+        background: #ffc107;
+        transform: translateY(-4px);
+        box-shadow: 0 8px 25px rgba(255, 215, 0, 0.6);
+    }
+    .gemini-btn-group {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    .gemini-btn {
+        display: inline-block;
+        flex-grow: 1;
+        max-width: 48%;
+        padding: 10px 15px;
+        font-size: 0.9rem;
+        margin: 0;
+    }
 
-    /* --- HIỆU ỨNG BIRTHDAY (TỪ SDASD.HTML) --- */
-    /* Cấu hình các Scene chính */
+
+    /* --- Birthday Effect Scene --- */
     .birthday-scene-overlay {
       position: fixed;
       top: 0;
@@ -158,93 +209,213 @@
       background: #111;
       color: white;
       z-index: 100;
-      display: none; /* Mặc định ẩn */
+      display: none;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       overflow: hidden;
-      font-family: 'Arial', sans-serif;
+      font-family: 'Poppins', 'Arial', sans-serif;
+    }
+    
+    /* Start Screen Styles */
+    #startScreen {
+        text-align: center;
+        padding: 20px;
+        animation: fadeIn 1s ease-out;
+    }
+    #startScreen h2 {
+        font-family: 'Dancing Script', cursive;
+        font-size: 4rem;
+        color: #ffd700;
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        margin-bottom: 20px;
+    }
+    #startScreen p {
+        font-size: 1.5rem;
+        margin-bottom: 40px;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
     }
 
-    /* 1. Phần Nến & Đếm ngược (CẢI THIỆN) */
+    /* === NEW CANDLE & FLAME STYLES (COMPLETE REDESIGN) === */
     #candleSection {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        perspective: 800px;
     }
-    .candle-container {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    .candle-holder {
+        position: relative;
+        width: 80px;
+        display: flex;
+        justify-content: center;
+        margin-top: 50px;
     }
-    .candle {
-      width: 40px; /* To hơn */
-      height: 180px; /* To hơn */
-      background: linear-gradient(to bottom, #f9f9f9, #e0e0e0, #f9f9f9);
-      border-radius: 8px 8px 0 0; /* Bo góc nhiều hơn */
-      position: relative;
-      box-shadow: 0 0 25px rgba(255, 165, 0, 0.6), inset 0 5px 10px rgba(0, 0, 0, 0.1);
-      transition: all 0.5s ease;
+    .candle-body {
+        width: 60px;
+        height: 200px;
+        background: repeating-linear-gradient(
+            45deg,
+            #ff7b7b,
+            #ff7b7b 10px,
+            #ffadad 10px,
+            #ffadad 20px
+        );
+        border-radius: 6px 6px 0 0;
+        position: relative;
+        box-shadow: inset 0 -10px 15px rgba(0,0,0,0.15), 0 5px 10px rgba(0,0,0,0.2);
     }
-    .flame {
-      width: 30px; /* To hơn */
-      height: 70px; /* To hơn */
-      background: linear-gradient(to top, #ff9800, #ff5722, #ff9800);
-      border-radius: 50% 50% 20% 20%;
-      position: absolute;
-      top: -70px; /* Cân đối với chiều cao mới */
-      left: 50%;
-      transform: translateX(-50%);
-      animation: flicker 0.3s infinite alternate;
-      box-shadow: 0 0 30px rgba(255, 87, 34, 1);
+    .candle-body::before { /* Dripping Wax Effect */
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 120%;
+        height: 30px;
+        background: #ff7b7b;
+        border-radius: 50%;
+        box-shadow: 0 5px 5px rgba(0,0,0,0.1);
     }
-    @keyframes flicker {
-      0% { transform: translateX(-50%) scale(1); opacity: 1; }
-      100% { transform: translateX(-50%) scale(1.05); opacity: 0.95; }
+    .wick {
+        position: absolute;
+        top: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 6px;
+        height: 20px;
+        background: #5a3e2b;
+        border-radius: 2px;
+        z-index: 2;
     }
+    .wick::after { /* glowing part of wick */
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 10px;
+        height: 6px;
+        background: #ffc400;
+        border-radius: 50%;
+        box-shadow: 0 0 10px 2px #ffc400;
+    }
+    .new-flame-container {
+        position: absolute;
+        top: -85px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 50px;
+        height: 90px;
+        transform-style: preserve-3d;
+        animation: move-flame 3s infinite ease-in-out;
+    }
+    .flame-part {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%) ;
+        transform-origin: bottom center;
+        border-radius: 50% 50% 10% 10%;
+        box-shadow: 0 0 20px 5px #ffae42, 0 0 40px 10px #ff7800, 0 0 60px 15px rgba(255, 50, 0, 0.7);
+    }
+    .flame-part.base {
+        width: 30px;
+        height: 80px;
+        background: linear-gradient(to top, #ff7800, #ffae42);
+        animation: scale-flame 1.5s infinite ease-in-out;
+    }
+    .flame-part.blue {
+        width: 20px;
+        height: 30px;
+        background: #8ecae6;
+        animation: scale-flame 2s infinite ease-in-out;
+        box-shadow: 0 0 15px 5px #8ecae6;
+    }
+    .flame-part.glow { /* a subtle white-hot center */
+        width: 15px;
+        height: 50px;
+        background: #fff;
+        filter: blur(5px);
+        animation: scale-flame 1s infinite ease-in-out;
+        box-shadow: none;
+    }
+    /* New Flame Animations */
+    @keyframes move-flame {
+      0%, 100% { transform: translateX(-50%) rotateZ(2deg) rotateY(10deg); }
+      50% { transform: translateX(-50%) rotateZ(-2deg) rotateY(-10deg); }
+    }
+    @keyframes scale-flame {
+      0%, 100% { transform: scaleY(1) scaleX(1) translateX(-50%); }
+      50% { transform: scaleY(1.05) scaleX(0.95) translateX(-50%); }
+    }
+    /* Smoke effect */
+    .smoke {
+        position: absolute;
+        top: -90px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 8px;
+        height: 8px;
+        background: #aaa;
+        border-radius: 50%;
+        opacity: 0;
+        filter: blur(4px);
+        z-index: 10;
+    }
+    .smoke.puff {
+        animation: puff-out 2.5s ease-out forwards;
+    }
+    @keyframes puff-out {
+      0% { transform: translateX(-50%) translateY(0) scale(1); opacity: 0.8; }
+      100% { transform: translateX(-60%) translateY(-80px) scale(4); opacity: 0; }
+    }
+    /* === END NEW CANDLE STYLES === */
+    
     .countdown {
       font-size: 2rem;
-      margin-top: -100px; /* Nâng cao hơn ngọn lửa */
+      margin-top: 20px; 
       text-align: center;
       font-weight: bold;
       color: #fff;
       text-shadow: 0 0 5px #ff9800;
-      transition: margin-top 0.5s ease;
     }
     .instruction {
-      font-size: 1.5rem;
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.5rem;
+      color: #ffd700;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
       margin-bottom: 20px;
       text-align: center;
     }
 
-    /* 2. Phần Pháo hoa (Canvas) */
+    /* Fireworks Canvas */
     #birthdayCanvas {
       position: absolute;
       top: 0;
       left: 0;
       z-index: 5;
     }
-
-    /* Confetti/Dot Styles (NEW: Chấm tròn) */
+    
+    /* Confetti Styles */
     .confetti-container {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      pointer-events: none; /* Cho phép click xuyên qua */
+      pointer-events: none;
       overflow: hidden;
     }
-
     .confetti-dot {
       position: absolute;
-      border-radius: 50%; /* Chấm tròn */
+      border-radius: 50%;
       opacity: 0;
       animation: dot-fall linear forwards;
       z-index: 10;
     }
-
     @keyframes dot-fall {
         0% { transform: translateY(-10vh); opacity: 0; }
         10% { opacity: 0.8; }
@@ -252,20 +423,20 @@
         100% { transform: translateY(100vh); opacity: 0; }
     }
 
-
-    /* 3. Phần Bánh kem và Ảnh */
+    /* Cake & Photo Section */
     #cakeSection {
-      position: relative; /* Quan trọng cho letter absolute */
+      position: relative;
       width: 100%;
       height: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
-      background: linear-gradient(rgba(2,6,23,0.6), rgba(2,6,23,0.6)), url('trangtri.jpg');
+      background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
       background-size: cover;
       background-position: center;
       z-index: 30;
     }
+
     .cake-container {
       display: flex;
       flex-direction: column;
@@ -274,6 +445,7 @@
       width: 90%;
       max-width: 1000px;
       position: relative;
+      z-index: 31; /* Above decorations */
     }
     .cake-content {
         display: flex;
@@ -281,101 +453,78 @@
         align-items: center;
         width: 100%;
         max-width: 900px;
-        flex-wrap: wrap; /* Responsive */
+        flex-wrap: wrap;
     }
     .cake {
       width: 100%;
-      max-width: 550px; /* Phóng to bánh kem */
+      max-width: 550px;
       height: auto;
       filter: drop-shadow(0 20px 40px rgba(0,0,0,0.35));
       z-index: 3;
     }
 
-    /* GALLERY STYLES (Được lấy từ untitled (1).html) */
+    /* Photo Gallery Styles */
     .photo-gallery {
-      /* Thay thế image-preview-group cũ */
-      --d: 10s; /* Thời gian animation */
+      --d: 10s;
       display: grid;
       place-items: center;
-      width: 250px; /* Kích thước tổng thể của khu vực gallery */
+      width: 250px;
       height: 300px;
       margin-left: 20px;
       position: relative;
     }
-    
-    /* Ảnh cố định (Fixed images - Ảnh 1 & 2) */
     .photo-gallery > img.static-image {
         grid-area: 1/1;
         width: 100%;
         aspect-ratio: 1;
         object-fit: cover;
-        border: 10px solid #f2f2f2; /* Khung viền */
+        border: 10px solid #f2f2f2;
         box-shadow: 0 0 4px #0007; 
-        z-index: 3; /* Cao hơn ảnh động */
+        z-index: 3;
         opacity: 1; 
-        transform: rotate(var(--r, 0deg)); /* Chỉ áp dụng góc quay nhẹ tĩnh */
-        /* Đảm bảo không có animation slide/z-order cho ảnh tĩnh */
+        transform: rotate(var(--r, 0deg));
         animation: none;
     }
-
     .photo-gallery > img.dynamic-image {
-      /* Ảnh riêng lẻ (Ảnh 3 trở đi) */
       grid-area: 1/1;
       width: 100%;
       aspect-ratio: 1;
       object-fit: cover;
-      
-      /* Khung viền và đổ bóng */
-      border: 10px solid #f2f2f2; /* Viền trắng */
-      box-shadow: 0 0 4px #0007; /* Đổ bóng nhẹ */
-      
+      border: 10px solid #f2f2f2;
+      box-shadow: 0 0 4px #0007;
       z-index: 2;
       animation: slide var(--d) infinite, z-order var(--d) infinite steps(1);
-      opacity: 0; /* Mặc định ẩn, sẽ được hiển thị bằng JS */
+      opacity: 0;
       transition: opacity 0.5s;
     }
-    
     .photo-gallery > img.visible {
-        opacity: 1; /* Hiển thị ảnh khi được JS thêm vào */
+        opacity: 1;
     }
-
-    /* Keyframes được copy từ untitled (1).html */
     @keyframes slide {
-      /* 10% (xuất hiện bên phải), 0%, 100%, 20% (vị trí trung tâm) */
       10% { transform: translateX(120%) rotate(var(--r)); }
       0%, 100%, 20% { transform: translateX(0%) rotate(var(--r)); }
     }
-
     @keyframes z-order {
-      /* Khi ảnh không hiển thị/đang di chuyển (10%-20%), z-index thấp hơn */
       10%, 20% { z-index: 1; }
       80% { z-index: 2; }
     }
 
-    @keyframes z-order-last {
-      /* Điều chỉnh cho ảnh cuối cùng nếu cần, nhưng dùng chung z-order là tốt nhất */
-      10%, 20% { z-index: 1; }
-      90% { z-index: 2; }
-    }
 
-
-    /* 4. Phần Lá thư (Đã chỉnh sửa theo yêu cầu) */
+    /* Letter Styles */
     #letterContainerStatic {
       position: absolute;
-      /* Đặt bên trái và chéo 15 độ */
       bottom: 15%;
       left: 5%; 
       transform: rotate(-15deg); 
       cursor: pointer;
-      width: 160px; /* Nhỏ hơn gấp đôi */
-      height: 140px; /* Nhỏ hơn gấp đôi */
+      width: 160px;
+      height: 140px;
       z-index: 35; 
       transition: transform 0.3s ease;
     }
     #letterContainerStatic:hover {
         transform: rotate(-15deg) scale(1.05);
     }
-    /* Style Phong bì tĩnh */
     .letter-envelope {
       width: 100%;
       height: 100%;
@@ -388,9 +537,9 @@
       left: 0;
       width: 0;
       height: 0;
-      border-left: 80px solid transparent; /* Giảm một nửa */
-      border-right: 80px solid transparent; /* Giảm một nửa */
-      border-bottom: 45px solid #ff9eb0; /* Giảm một nửa */
+      border-left: 80px solid transparent;
+      border-right: 80px solid transparent;
+      border-bottom: 45px solid #ff9eb0;
       transform-origin: bottom center;
       transform: rotateX(180deg);
       transition: transform 1s ease;
@@ -401,7 +550,7 @@
       position: absolute;
       bottom: 0;
       width: 100%;
-      height: 95px; /* Giảm một nửa */
+      height: 95px;
       background: #ffc1cc;
       border-radius: 0 0 10px 10px;
       z-index: 1;
@@ -409,13 +558,13 @@
     }
     .letter-heart {
       position: absolute;
-      top: 36px; /* Giảm một nửa */
+      top: 36px;
       left: 50%;
       transform: translateX(-50%);
-      width: 18px; /* Giảm một nửa */
-      height: 18px; /* Giảm một nửa */
+      width: 18px;
+      height: 18px;
       background: red;
-      clip-path: polygon(50% 0%, 61% 10%, 70% 20%, 75% 35%, 70% 50%, 50% 70%, 30% 50%, 25% 35%, 30% 20%, 39% 10%);
+      clip-path: polygon(50% 0%, 61% 10%, 70% 20%, 75% 35%, 70% 50%, 30% 50%, 25% 35%, 30% 20%, 39% 10%);
       z-index: 4;
       box-shadow: 0 0 8px rgba(0,0,0,0.3);
       animation: pulse 2s infinite;
@@ -426,7 +575,7 @@
       100% { transform: translateX(-50%) scale(1); }
     }
 
-    /* Modal hiển thị nội dung thư (Giống sdasd.html) */
+    /* Letter Modal Styles */
     .letter-modal-overlay {
       position: fixed;
       top: 0;
@@ -447,39 +596,31 @@
       opacity: 1;
       pointer-events: auto;
     }
-
-    /* Khung chứa thư bên trong Modal */
-    .letter-modal-container { /* Kích thước đầy đủ để chứa hiệu ứng trượt */
+    .letter-modal-container {
         width: 320px;
         height: 280px;
         position: relative;
         cursor: pointer;
         perspective: 600px;
     }
-
-    /* Phong bì bên trong Modal */
     #letter-modal-envelope {
       width: 100%;
       height: 100%;
       position: relative;
     }
-
-    /* Nắp phong bì (sử dụng lại style tĩnh nhưng không scale) */
     #letter-modal-envelope .letter-lid {
-        border-left: 160px solid transparent; /* Kích thước gốc */
+        border-left: 160px solid transparent;
         border-right: 160px solid transparent;
         border-bottom: 90px solid #ff9eb0;
     }
     #letter-modal-envelope .letter-base {
-        height: 190px; /* Kích thước gốc */
+        height: 190px;
     }
     #letter-modal-envelope .letter-heart {
-        top: 72px; /* Kích thước gốc */
+        top: 72px;
         width: 36px;
         height: 36px;
     }
-
-    /* Nội dung thư (Giấy) */
     #letter-modal-content {
       position: absolute;
       bottom: 10px;
@@ -504,21 +645,16 @@
       box-sizing: border-box;
       color: #333;
     }
-
-    /* Class kích hoạt trượt lên */
     #letter-modal-content.show {
-      transform: translate(-50%, -240px); /* Trượt lên khỏi phong bì */
+      transform: translate(-50%, -240px);
       opacity: 1;
     }
-
-    /* Đặt phong bì về trạng thái mở */
     .letter-open .letter-lid {
       transform: rotateX(0deg) !important;
     }
-
     .modal-close-btn {
         position: absolute;
-        top: -30px; /* Đặt ngoài khung thư */
+        top: -30px;
         right: -30px;
         font-size: 30px;
         color: white;
@@ -554,8 +690,8 @@
         #letterContainerStatic {
             bottom: 5%;
             left: 50%;
-            transform: translateX(-50%) rotate(0deg); /* Giảm độ chéo trên di động */
-            width: 160px; /* Giữ kích thước nhỏ */
+            transform: translateX(-50%) rotate(0deg);
+            width: 160px;
             height: 140px;
         }
         .cake-content {
@@ -564,10 +700,19 @@
         .photo-gallery {
             margin: 30px 0 0 0;
         }
+        #startScreen h2 {
+            font-size: 3rem;
+        }
     }
   </style>
 </head>
 <body>
+  <!-- Loading Overlay for API Calls -->
+  <div id="loading-overlay">
+    <div class="spinner"></div>
+    Đang tạo phép màu...
+  </div>
+  
   <div class="container" id="main-container">
     <header>
       <h1>🎂 Happy Birthday Cá Nhân Hóa 🎂</h1>
@@ -575,9 +720,8 @@
     </header>
     
     <div class="content">
-      <!-- Form tạo Valentine -->
+      <!-- Creation Form -->
       <div id="creation-section">
-        <!-- ... (FORM elements remain the same) ... -->
         <div class="form-section">
           <h2>Thông tin của bạn</h2>
           <div class="input-group">
@@ -597,6 +741,11 @@
             <label for="valentine-message">Lời chúc Birthday</label>
             <textarea id="valentine-message" placeholder="Viết lời chúc sinh nhật từ trái tim của bạn..."></textarea>
           </div>
+          
+          <div class="gemini-btn-group">
+            <button type="button" id="generate-wish-btn" class="btn gemini-btn">✨ Gợi Ý Lời Chúc</button>
+            <button type="button" id="enhance-wish-btn" class="btn gemini-btn">✨ Chỉnh Sửa Lời Chúc</button>
+          </div>
         </div>
         
         <div class="form-section">
@@ -606,10 +755,9 @@
             <button type="button" id="upload-btn" class="btn upload-btn">📤 Upload Ảnh Mới</button>
           </div>
 
-          <!-- NEW: Upload Nhạc nền -->
           <div class="input-group">
             <label>Upload Nhạc Nền (File Audio):</label>
-            <button type="button" id="upload-music-btn" class="btn upload-btn" style="background: #e30489;">🎵 Upload Nhạc Nền</button>
+            <button type="button" id="upload-music-btn" class="btn">🎵 Upload Nhạc Nền</button>
             <small id="music-preview" class="block mt-2 text-sm text-gray-500">Chưa có nhạc nền được chọn.</small>
           </div>
           
@@ -629,7 +777,7 @@
         </div>
       </div>
       
-      <!-- Phần chia sẻ link -->
+      <!-- Share Section -->
       <div id="share-section" class="hidden">
         <div class="share-section">
           <h2>Birthday của bạn đã sẵn sàng!</h2>
@@ -644,40 +792,47 @@
     </div>
   </div>
   
-  <!-- CÁC SCENE MỚI CHO HIỆU ỨNG (Thay thế #valentine-display) -->
+  <!-- Birthday Effect Scenes -->
   <div id="birthday-effect-overlay" class="birthday-scene-overlay">
     
-    <!-- Audio Element (Thêm vào đây) -->
     <audio id="background-music" loop preload="auto" style="display: none;"></audio>
-
-    <!-- 1. Phần Nến và Đếm ngược -->
-    <div id="candleSection" class="hidden">
-      <div class="candle-container">
-        <p class="instruction">Hãy thổi nến sau 3s</p>
-        <div class="candle">
-          <div class="flame"></div>
-        </div>
-        <div class="countdown" id="countdown">3</div>
-      </div>
+    
+    <!-- Start Screen -->
+    <div id="startScreen">
+        <h2 id="start-screen-title">Bạn đã sẵn sàng chưa?</h2>
+        <p>Một bất ngờ đặc biệt đang chờ đợi bạn.</p>
+        <button id="start-flow-btn" class="btn start-btn">Khám phá Ngay!</button>
     </div>
 
-    <!-- 2. Phần hiển thị Happy Birthday (Pháo hoa) -->
-    <div id="birthdaySection" class="hidden">
-      <div class="confetti-container" id="confettiContainer">
-        <!-- Dot elements will be dynamically generated here -->
+    <!-- Candle Scene -->
+    <div id="candleSection" class="hidden">
+      <p class="instruction">Hãy thổi nến sau 3s</p>
+      <div class="candle-holder">
+          <div class="wick"></div>
+          <div class="new-flame-container" id="new-flame">
+              <div class="flame-part glow"></div>
+              <div class="flame-part blue"></div>
+              <div class="flame-part base"></div>
+          </div>
+          <div class="smoke" id="smoke-puff"></div>
+          <div class="candle-body"></div>
       </div>
+      <div class="countdown" id="countdown">3</div>
+    </div>
+
+    <!-- Fireworks Scene -->
+    <div id="birthdaySection" class="hidden">
+      <div class="confetti-container" id="confettiContainer"></div>
       <canvas id="birthdayCanvas"></canvas>
     </div>
 
-    <!-- 3. Phần Bánh kem và Lá thư (Cảnh tĩnh sau Pháo hoa) -->
+    <!-- Cake Scene -->
     <div id="cakeSection" class="hidden">
         <div class="cake-container">
             <div id="display-recipient" class="recipient-name-display"></div>
             <div class="cake-content">
                 <div class="relative flex justify-center items-center">
-                    <!-- SỬA ĐƯỜNG DẪN ẢNH BÁNH KEM -->
-                    <img src="hinhanh/banhkem.png" alt="Bánh kem" class="cake">
-                    <!-- Lá thư tĩnh (Left, -15deg, Overlapping) -->
+                    <img src="https://res.cloudinary.com/dwyql42uf/image/upload/v1728841022/banhkem_o3zb6i.png" alt="Bánh kem" class="cake">
                     <div id="letterContainerStatic" class="relative">
                         <div class="letter-envelope" id="letterEnvelopeStatic">
                             <div class="letter-lid"></div>
@@ -687,26 +842,21 @@
                     </div>
                 </div>
                 
-                <!-- Thay thế #imagePreviewGroup bằng photo-gallery -->
-                <div class="photo-gallery" id="photoGallery">
-                    <!-- Ảnh sẽ được JS chèn vào đây -->
-                </div>
+                <div class="photo-gallery" id="photoGallery"></div>
             </div>
         </div>
     </div>
   </div>
   
-  <!-- Modal hiển thị nội dung thư (Bây giờ sử dụng cấu trúc của sdasd.html) -->
+  <!-- Letter Modal -->
   <div id="letter-modal" class="letter-modal-overlay">
     <div class="letter-modal-container">
         <button class="modal-close-btn" id="modal-close-btn">&times;</button>
-        <!-- Phong bì bên trong Modal -->
         <div class="letter-envelope" id="letter-modal-envelope">
             <div class="letter-lid"></div>
             <div class="letter-base"></div>
             <div class="letter-heart"></div>
         </div>
-        <!-- Nội dung thư trượt lên -->
         <div id="letter-modal-content">
             <img id="letter-content-image" class="letter-content-image" alt="Ảnh trang trí" onerror="this.style.display='none'">
             <p class="text-center font-bold text-lg text-pink-600 mb-4">💌 Lời chúc từ người đặc biệt 💌</p>
@@ -722,6 +872,7 @@
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       // --- ELEMENT SELECTORS ---
+      const loadingOverlay = document.getElementById('loading-overlay');
       const mainContainer = document.getElementById('main-container');
       const creationSection = document.getElementById('creation-section');
       const shareSection = document.getElementById('share-section');
@@ -733,18 +884,20 @@
       const userNameInput = document.getElementById('user-name');
       const recipientNameInput = document.getElementById('recipient-name');
       const messageInput = document.getElementById('valentine-message');
-      const selectedImagesPreview = document.getElementById('selected-images-preview');
-      const selectedContainer = document.getElementById('selected-container');
       const uploadBtn = document.getElementById('upload-btn');
       
-      // NEW MUSIC ELEMENTS
+      const generateWishBtn = document.getElementById('generate-wish-btn');
+      const enhanceWishBtn = document.getElementById('enhance-wish-btn');
+      
       const uploadMusicBtn = document.getElementById('upload-music-btn');
       const musicPreview = document.getElementById('music-preview');
       const backgroundMusic = document.getElementById('background-music');
-
-      const previewText = document.getElementById('preview-text');
       
-      // Birthday Effect Elements (NEW)
+      const startScreen = document.getElementById('startScreen');
+      const startScreenTitle = document.getElementById('start-screen-title');
+      const startFlowBtn = document.getElementById('start-flow-btn');
+      
+      // Birthday Effect Elements
       const birthdayEffectOverlay = document.getElementById('birthday-effect-overlay');
       const candleSection = document.getElementById('candleSection');
       const birthdaySection = document.getElementById('birthdaySection');
@@ -752,11 +905,10 @@
       const countdownElement = document.getElementById('countdown');
       const letterContainerStatic = document.getElementById('letterContainerStatic');
       const displayRecipient = document.getElementById('display-recipient');
-      
-      // MODIFIED: Thay thế imagePreviewGroup
       const photoGallery = document.getElementById('photoGallery'); 
+      const confettiContainer = document.getElementById('confettiContainer');
 
-      // Modal Letter Elements (MODIFIED)
+      // Modal Letter Elements
       const letterModal = document.getElementById('letter-modal');
       const modalCloseBtn = document.getElementById('modal-close-btn');
       const letterModalEnvelope = document.getElementById('letter-modal-envelope');
@@ -764,273 +916,200 @@
       const letterContentMessage = document.getElementById('letter-content-message');
       const letterContentImage = document.getElementById('letter-content-image');
       
-      // Confetti/Dot elements (MODIFIED)
-      const confettiContainer = document.getElementById('confettiContainer');
-      let confettiInterval = null;
-      const DOT_COLORS = ['#ff4d6d', '#ffc1cc', '#f9f9f9', '#ffd700', '#4CAF50', '#00bcd4', '#9c27b0']; // Mảng màu mới
-
-      // --- DATA AND INITIALIZATION ---
+      // --- DATA AND STATE ---
       let uploadedCloudinaryImages = [];
-      let uploadedMusicUrl = ''; // NEW: Lưu URL nhạc
-      let currentValentineData = null; // Store data globally for effects
+      let uploadedMusicUrl = '';
+      let currentValentineData = null;
+      let confettiInterval = null;
+      const DOT_COLORS = ['#ff4d6d', '#ffc1cc', '#f9f9f9', '#ffd700', '#4CAF50', '#00bcd4', '#9c27b0'];
+      const API_KEY = "";
+      const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${API_KEY}`;
 
-      // Kiểm tra xem có tham số URL không (trang hiển thị Birthday)
+      // Check for URL params to display birthday page
       const urlParams = new URLSearchParams(window.location.search);
       const valentineDataParam = urlParams.get('data');
       
       if (valentineDataParam) {
-        mainContainer.classList.add('hidden'); // Ẩn form chính
-        birthdayEffectOverlay.style.display = 'flex'; // Hiển thị overlay
+        mainContainer.classList.add('hidden');
+        birthdayEffectOverlay.style.display = 'flex';
         showBirthdayFlow(valentineDataParam);
       }
       
-      // Cấu hình Cloudinary Widget cho Ảnh
+      // --- UTILITY FUNCTIONS ---
+      function showLoading() { loadingOverlay.style.display = 'flex'; }
+      function hideLoading() { loadingOverlay.style.display = 'none'; }
+
+      async function generateContentWithRetry(payload, retries = 3) {
+          for (let i = 0; i < retries; i++) {
+              try {
+                  const response = await fetch(API_URL, {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify(payload)
+                  });
+                  if (!response.ok) {
+                      if (response.status === 429 && i < retries - 1) {
+                          const delay = Math.pow(2, i) * 1000 + Math.random() * 1000;
+                          await new Promise(resolve => setTimeout(resolve, delay));
+                          continue;
+                      }
+                      throw new Error(`API call failed: ${response.status}`);
+                  }
+                  const result = await response.json();
+                  return result.candidates?.[0]?.content?.parts?.[0]?.text.trim() || '';
+              } catch (error) {
+                  console.error("Gemini API Error:", error);
+                  if (i === retries - 1) throw new Error("Thất bại khi kết nối tới dịch vụ AI.");
+              }
+          }
+          throw new Error("Không thể hoàn thành yêu cầu.");
+      }
+      
+      // --- GEMINI API LOGIC ---
+      generateWishBtn.addEventListener('click', async () => {
+          const recipientName = recipientNameInput.value.trim() || 'Người Đặc Biệt';
+          const senderName = userNameInput.value.trim() || 'Bạn';
+          
+          const systemPrompt = "Bạn là chuyên gia viết lời chúc sinh nhật lãng mạn, chân thành bằng tiếng Việt. Hãy tạo một lời chúc cá nhân hóa ngắn gọn, ấm áp.";
+          const userQuery = `Viết một lời chúc sinh nhật cho ${recipientName} từ ${senderName}. Độ dài khoảng 3-4 câu.`;
+          const payload = { contents: [{ parts: [{ text: userQuery }] }], systemInstruction: { parts: [{ text: systemPrompt }] } };
+
+          showLoading();
+          try {
+              const generatedText = await generateContentWithRetry(payload);
+              if (generatedText) messageInput.value = generatedText;
+              else alert("AI không thể tạo lời chúc. Vui lòng thử lại.");
+          } catch (error) { alert(error.message); } 
+          finally { hideLoading(); }
+      });
+      
+      enhanceWishBtn.addEventListener('click', async () => {
+          const currentMessage = messageInput.value.trim();
+          if (!currentMessage) {
+              alert("Vui lòng nhập lời chúc trước khi yêu cầu AI chỉnh sửa.");
+              return;
+          }
+          const userQuery = `Hãy chỉnh sửa và nâng cấp lời chúc sinh nhật sau thành một đoạn văn lãng mạn và xúc động hơn: "${currentMessage}"`;
+          const payload = { contents: [{ parts: [{ text: userQuery }] }], systemInstruction: { parts: [{ text: "Bạn là một nhà văn lãng mạn. Hãy viết lời chúc bằng tiếng Việt." }] } };
+
+          showLoading();
+          try {
+              const enhancedText = await generateContentWithRetry(payload);
+              if (enhancedText) messageInput.value = enhancedText;
+              else alert("AI không thể chỉnh sửa lời chúc. Vui lòng thử lại.");
+          } catch (error) { alert(error.message); } 
+          finally { hideLoading(); }
+      });
+
+      // --- Cloudinary Widgets ---
       const cloudinaryWidgetImage = cloudinary.createUploadWidget({
-        cloudName: 'dyk8aumyf',
-        uploadPreset: 'ml_default',
-        sources: ['local', 'url', 'camera'],
-        multiple: true,
-        maxFiles: 10,
-        cropping: true,
-        showAdvancedOptions: true,
-        folder: 'valentine-images',
-        resourceType: 'image',
-        clientAllowedFormats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
-        maxImageFileSize: 10000000,
-        theme: 'minimal'
+        cloudName: 'dyk8aumyf', uploadPreset: 'ml_default', sources: ['local', 'url', 'camera'], multiple: true, maxFiles: 10, folder: 'valentine-images', resourceType: 'image',
       }, (error, result) => {
-        if (error) {
-          console.error('Upload error (Image):', error);
-          alert('Lỗi upload ảnh: ' + error.message + '\n\nVui lòng kiểm tra Cloudinary setup!');
-          return;
-        }
+        if (error) console.error('Upload error (Image):', error);
         if (result && result.event === "success") {
           uploadedCloudinaryImages.push(result.info.secure_url);
-          updateSelectedImages();
         }
       });
       uploadBtn.addEventListener('click', () => cloudinaryWidgetImage.open());
 
-      // NEW: Cấu hình Cloudinary Widget cho Nhạc
       const cloudinaryWidgetMusic = cloudinary.createUploadWidget({
-        cloudName: 'dyk8aumyf',
-        uploadPreset: 'ml_default',
-        sources: ['local', 'url'],
-        multiple: false,
-        maxFiles: 1,
-        folder: 'valentine-music',
-        resourceType: 'video', // Dùng resourceType video cho audio
-        clientAllowedFormats: ['mp3', 'wav', 'ogg', 'aac'],
-        maxFileSize: 10000000, // 10MB
-        theme: 'minimal'
+        cloudName: 'dyk8aumyf', uploadPreset: 'ml_default', sources: ['local', 'url'], multiple: false, maxFiles: 1, folder: 'valentine-music', resourceType: 'video',
       }, (error, result) => {
-        if (error) {
-          console.error('Upload error (Music):', error);
-          alert('Lỗi upload nhạc: ' + error.message + '\n\nVui lòng kiểm tra Cloudinary setup!');
-          return;
-        }
+        if (error) console.error('Upload error (Music):', error);
         if (result && result.event === "success") {
           uploadedMusicUrl = result.info.secure_url;
           musicPreview.textContent = `Đã chọn: ${result.info.original_filename}`;
-          console.log('Music upload successful:', uploadedMusicUrl);
         }
       });
       uploadMusicBtn.addEventListener('click', () => cloudinaryWidgetMusic.open());
 
-
-      // Cập nhật preview ảnh đã chọn (Giữ nguyên logic từ 2222.html)
-      function updateSelectedImages() {
-        const selectedImages = [];
-        
-        // Chỉ thêm ảnh từ Cloudinary
-        selectedImages.push(...uploadedCloudinaryImages);
-        
-        selectedContainer.innerHTML = '';
-        
-        if (selectedImages.length > 0) {
-          selectedImagesPreview.classList.remove('hidden');
-          
-          selectedImages.forEach((imgSrc, index) => {
-            const imgItem = document.createElement('div');
-            imgItem.className = 'selected-item';
-            
-            const img = document.createElement('img');
-            img.src = imgSrc;
-            img.alt = `Ảnh ${index + 1}`;
-            img.onerror = function() { this.style.display = 'none'; };
-            
-            const removeBtn = document.createElement('button');
-            removeBtn.className = 'remove-cloudinary';
-            removeBtn.innerHTML = '×';
-            removeBtn.onclick = function(e) {
-              e.stopPropagation();
-              // Xóa ảnh khỏi mảng
-              const imgIndex = uploadedCloudinaryImages.indexOf(imgSrc);
-              if (imgIndex !== -1) {
-                uploadedCloudinaryImages.splice(imgIndex, 1);
-              }
-              updateSelectedImages();
-            };
-            
-            imgItem.appendChild(img);
-            imgItem.appendChild(removeBtn);
-            selectedContainer.appendChild(imgItem);
-          });
-        } else {
-          selectedImagesPreview.classList.add('hidden');
-        }
-      }
-
-      // Cập nhật preview form (Giữ nguyên)
-      function updatePreview() {
-        const userName = userNameInput.value || 'Bạn';
-        const recipientName = recipientNameInput.value || 'Người ấy';
-        const message = messageInput.value || 'Lời chúc từ trái tim...';
-        
-        previewText.innerHTML = `
-          <strong>${userName}</strong> gửi đến <strong>${recipientName}</strong>:<br><br>
-          "${message.substring(0, 100)}${message.length > 100 ? '...' : ''}"
-        `;
-      }
-      
-      userNameInput.addEventListener('input', updatePreview);
-      recipientNameInput.addEventListener('input', updatePreview);
-      messageInput.addEventListener('input', updatePreview);
-
-      // Tạo Birthday (Giữ nguyên)
+      // --- FORM LOGIC ---
       createBtn.addEventListener('click', function() {
-        // Lấy giá trị, sử dụng chuỗi rỗng nếu không có
-        const userName = userNameInput.value.trim();
-        const recipientName = recipientNameInput.value.trim();
-        const message = messageInput.value.trim();
+        const userName = userNameInput.value.trim() || 'Người Gửi Ẩn Danh';
+        const recipientName = recipientNameInput.value.trim() || 'Người Đặc Biệt';
+        const message = messageInput.value.trim() || 'Chúc mừng sinh nhật! Mong bạn có một ngày thật vui vẻ và hạnh phúc.';
         
-        const selectedImages = uploadedCloudinaryImages;
-        
-        // SỬ DỤNG GIÁ TRỊ MẶC ĐỊNH CHO THIẾT KẾ HIỂN THỊ
-        const finalUserName = userName || 'Người Gửi Ẩn Danh';
-        const finalRecipientName = recipientName || 'Người Đặc Biệt';
-        const finalMessage = message || 'Chúc mừng sinh nhật! Mong rằng ngày hôm nay của bạn sẽ tràn ngập niềm vui và hạnh phúc.';
-
-        
-        const valentineData = { 
-            userName: finalUserName, 
-            recipientName: finalRecipientName, 
-            message: finalMessage, 
-            images: selectedImages,
-            musicUrl: uploadedMusicUrl
-        };
-        
-        const jsonString = JSON.stringify(valentineData);
-        const uriEncodedString = encodeURIComponent(jsonString);
-        const encodedData = btoa(uriEncodedString);
-
+        const valentineData = { userName, recipientName, message, images: uploadedCloudinaryImages, musicUrl: uploadedMusicUrl };
+        const encodedData = btoa(encodeURIComponent(JSON.stringify(valentineData)));
         const shareUrl = `${window.location.origin}${window.location.pathname}?data=${encodedData}`;
         
         creationSection.classList.add('hidden');
         shareSection.classList.remove('hidden');
         shareLink.textContent = shareUrl;
-        
-        window.history.replaceState(null, null, `?data=${encodedData}`);
       });
       
-      // Sao chép link (Giữ nguyên)
       copyBtn.addEventListener('click', function() {
         navigator.clipboard.writeText(shareLink.textContent)
           .then(() => {
-            const originalText = copyBtn.textContent;
             copyBtn.textContent = 'Đã sao chép!';
-            setTimeout(() => { copyBtn.textContent = originalText; }, 2000);
-          })
-          .catch(err => {
-            console.error('Lỗi sao chép: ', err);
+            setTimeout(() => { copyBtn.textContent = 'Sao chép Link'; }, 2000);
           });
       });
       
-      // Tạo Valentine mới (Giữ nguyên)
-      newValentineBtn.addEventListener('click', function() {
-        window.history.replaceState(null, null, window.location.pathname);
-        window.location.reload();
-      });
+      newValentineBtn.addEventListener('click', () => window.location.href = window.location.pathname);
       
-      // --- LOGIC HIỂN THỊ HIỆU ỨNG ---
+      // --- BIRTHDAY EFFECT LOGIC ---
       
       function showBirthdayFlow(encodedData) {
         try {
-          const uriEncodedString = atob(encodedData);
-          const jsonString = decodeURIComponent(uriEncodedString);
-          currentValentineData = JSON.parse(jsonString);
+          currentValentineData = JSON.parse(decodeURIComponent(atob(encodedData)));
           
-          // 1. Chuẩn bị nội dung
           displayRecipient.textContent = `Happy Birthday, ${currentValentineData.recipientName}!`;
           letterContentMessage.innerHTML = currentValentineData.message.replace(/\n/g, '<br>');
+          startScreenTitle.textContent = `Gửi tặng ${currentValentineData.recipientName}`;
           
-          // Ẩn ảnh trong thư nếu không có ảnh, nếu có thì đặt ảnh đầu tiên
-          if (currentValentineData.images.length > 0) { 
-            letterContentImage.src = currentValentineData.images[0];
-          } else {
-            letterContentImage.style.display = 'none'; 
-          }
+          if (currentValentineData.images.length > 0) letterContentImage.src = currentValentineData.images[0];
+          else letterContentImage.style.display = 'none'; 
 
-          // NEW: Thiết lập nhạc nền
-          if (currentValentineData.musicUrl) {
-              backgroundMusic.src = currentValentineData.musicUrl;
-          }
+          if (currentValentineData.musicUrl) backgroundMusic.src = currentValentineData.musicUrl;
 
-          // 2. Chèn tất cả ảnh vào Gallery (ĐÃ SỬA ĐỔI LOGIC TĨNH/ĐỘNG)
           photoGallery.innerHTML = '';
           currentValentineData.images.forEach((imgSrc, index) => {
               const img = document.createElement('img');
               img.src = imgSrc;
               img.alt = `Ảnh ${index + 1}`;
-              img.classList.add('visible'); // Đánh dấu là hiển thị
+              img.classList.add('visible');
 
-              // LOGIC PHÂN BIỆT ẢNH TĨNH VÀ ẢNH ĐỘNG
               if (index < 2) {
-                  // Ảnh 1 và 2 (index 0 và 1) là ảnh tĩnh
                   img.classList.add('static-image');
-                  
-                  // Áp dụng góc xoay tĩnh ngẫu nhiên nhẹ (để chúng không hoàn toàn thẳng đứng)
                   const staticRotation = (index === 0 ? -1 : 1) * (5 + index * 3);
                   img.style.setProperty('--r', `${staticRotation}deg`);
-                  // Tăng z-index của ảnh 1, 2 để chúng luôn nằm trên ảnh động
                   img.style.zIndex = 4 + index; 
-
               } else {
-                  // Ảnh 3 trở đi (index >= 2) là ảnh động xoay
                   img.classList.add('dynamic-image');
-                  
-                  // ÁP DỤNG THUỘC TÍNH CSS ĐỘNG CHO HIỆU ỨNG XOAY
-                  const delay = -((index - 2) * 0.2); // Bắt đầu tính delay từ ảnh thứ 3
+                  const delay = -((index - 2) * 0.2);
                   const rotation = (index % 2 === 0 ? -1 : 1) * (5 + index * 3);
-                  
                   img.style.setProperty('--r', `${rotation}deg`);
                   img.style.animationDelay = `calc(${delay} * var(--d))`;
               }
-
               photoGallery.appendChild(img);
           });
           
-          // 3. Khởi chạy luồng animation
-          startCandleCountdown(currentValentineData.recipientName);
+          startScreen.classList.remove('hidden');
 
         } catch (error) {
-          console.error('Lỗi khi giải mã dữ liệu Birthday:', error);
-          alert('Dữ liệu không hợp lệ! Vui lòng kiểm tra lại link.');
+          console.error('Error decoding data:', error);
+          alert('Dữ liệu không hợp lệ!');
           mainContainer.classList.remove('hidden');
           birthdayEffectOverlay.style.display = 'none';
         }
       }
 
+      startFlowBtn.addEventListener('click', function() {
+          startScreen.classList.add('hidden');
+          if (backgroundMusic.src) {
+               backgroundMusic.play().catch(e => console.warn('Playback blocked:', e));
+          }
+          startCandleCountdown(currentValentineData.recipientName);
+      });
+
       function startCandleCountdown(name) {
         candleSection.classList.remove('hidden');
-        
         let countdown = 3;
         countdownElement.textContent = countdown;
-        
         const countdownInterval = setInterval(() => {
           countdown--;
           countdownElement.textContent = countdown;
-          
           if (countdown === 0) {
             clearInterval(countdownInterval);
             blowCandle(name);
@@ -1039,567 +1118,96 @@
       }
       
       function blowCandle(name) {
-        const flame = document.querySelector('.flame');
+        const flame = document.getElementById('new-flame');
+        const smoke = document.getElementById('smoke-puff');
         if (flame) flame.style.display = 'none';
+        if (smoke) smoke.classList.add('puff');
         
-        // NEW MUSIC: Tự động phát nhạc sau khi nến tắt
-        if (backgroundMusic.src) {
-             backgroundMusic.play().catch(e => {
-                // Console log để debug, nhưng vẫn tiếp tục hiệu ứng
-                console.warn('Playback blocked. User interaction needed to play music.', e);
-             });
-        }
-
-        // Chuyển sang hiệu ứng pháo hoa
         setTimeout(() => {
           candleSection.classList.add('hidden');
           birthdaySection.classList.remove('hidden');
-          
-          startConfetti(); 
+          startConfetti();
           startBirthdayEffect(name);
         }, 1000);
       }
-
-      // MODIFIED: Confetti/Dot functions
+      
       function createConfetti() {
         const dot = document.createElement('div');
         dot.classList.add('confetti-dot');
-
-        // Random size (3px to 8px)
-        const size = 3 + Math.random() * 5; 
-        dot.style.width = `${size}px`;
-        dot.style.height = `${size}px`; 
-
-        // Random color
-        const color = DOT_COLORS[Math.floor(Math.random() * DOT_COLORS.length)];
-        dot.style.backgroundColor = color;
-
-        // Random starting position (top of the screen)
+        dot.style.width = `${3 + Math.random() * 5}px`;
+        dot.style.height = dot.style.width;
+        dot.style.backgroundColor = DOT_COLORS[Math.floor(Math.random() * DOT_COLORS.length)];
         dot.style.left = `${Math.random() * 100}vw`;
-
-        // Random animation duration and delay
-        const duration = 5 + Math.random() * 5; // 5s to 10s
+        const duration = 5 + Math.random() * 5;
         dot.style.animationDuration = `${duration}s`;
-        dot.style.animationDelay = `${-Math.random() * duration}s`; // Start off-screen
-
-        // Apply subtle horizontal movement (sway) using animation-name
-        dot.style.animationName = `dot-fall, sway${Math.floor(Math.random() * 2)}`;
-        
+        dot.style.animationDelay = `${-Math.random() * duration}s`;
         confettiContainer.appendChild(dot);
-
-        // Remove element after animation ends to prevent DOM overload
-        dot.addEventListener('animationend', () => {
-            dot.remove();
-        });
+        dot.addEventListener('animationend', () => dot.remove());
       }
-
+      
       function startConfetti() {
-        // Clear any existing elements
         confettiContainer.innerHTML = ''; 
-
-        // Add sway keyframes dynamically (since they depend on CSS variables or JS calculation)
-        const styleSheet = document.styleSheets[0];
-        
-        // Kiểm tra và thêm keyframes sway nếu chưa tồn tại (chỉ cần thêm 1 lần)
-        let sway0Exists = false;
-        for (const rule of styleSheet.cssRules) {
-            if (rule.name === 'sway0') {
-                sway0Exists = true;
-                break;
-            }
-        }
-
-        if (!sway0Exists) {
-             // Add sway animations if not present
-             styleSheet.insertRule(`@keyframes sway0 {
-                0% { transform: translateX(0); }
-                50% { transform: translateX(20px); }
-                100% { transform: translateX(0); }
-            }`, styleSheet.cssRules.length);
-
-            styleSheet.insertRule(`@keyframes sway1 {
-                0% { transform: translateX(0); }
-                50% { transform: translateX(-20px); }
-                100% { transform: translateX(0); }
-            }`, styleSheet.cssRules.length);
-        }
-
-        // Create initial burst
-        for (let i = 0; i < 50; i++) {
-            createConfetti();
-        }
-        
-        // Continuously create dots
-        confettiInterval = setInterval(createConfetti, 100); // Tần suất cao hơn cho hiệu ứng dày đặc
+        for (let i = 0; i < 20; i++) createConfetti();
+        confettiInterval = setInterval(createConfetti, 250);
       }
 
       function stopConfetti() {
-        if (confettiInterval) {
-            clearInterval(confettiInterval);
-            confettiInterval = null;
-        }
-        // Remove all dot elements gracefully (let the fall animation finish quickly)
+        if (confettiInterval) clearInterval(confettiInterval);
         confettiContainer.querySelectorAll('.confetti-dot').forEach(d => {
             d.style.opacity = 0;
             setTimeout(() => d.remove(), 1000); 
         });
       }
 
-      // --- PHẦN JS CỦA HIỆU ỨNG PHÁO HOA TỪ 2.HTML (ĐÃ SỬA ĐỔI) ---
-      
+      // --- FIREWORKS CANVAS EFFECT ---
       function startBirthdayEffect(userName) {
         const c = document.getElementById('birthdayCanvas');
         const w = c.width = window.innerWidth;
         const h = c.height = window.innerHeight;
         const ctx = c.getContext('2d');
-        
-        const hw = w / 2;
-        const hh = h / 2;
-        
-        // Tên người dùng cần được UPPERCASE để khớp với logic cũ
+        const hw = w / 2, hh = h / 2;
         const nameUppercase = userName.toUpperCase();
-
-        // Thêm tên người nhận vào strings
+        const FONT_NAME = 'Dancing Script';
         const opts = {
-            strings: ['HAPPY', 'BIRTHDAY', nameUppercase],
-            charSize: 30, // Base size for HAPPY/BIRTHDAY
-            charSpacing: 35,
-            lineHeight: 40,
-            
-            cx: w / 2,
-            cy: h / 2,
-            
-            fireworkPrevPoints: 10, fireworkBaseLineWidth: 5, fireworkAddedLineWidth: 8, fireworkSpawnTime: 200, fireworkBaseReachTime: 30, fireworkAddedReachTime: 30, fireworkCircleBaseSize: 20, fireworkCircleAddedSize: 10, fireworkCircleBaseTime: 30, fireworkCircleAddedTime: 30, fireworkCircleFadeBaseTime: 10, fireworkCircleFadeAddedTime: 5, fireworkBaseShards: 5, fireworkAddedShards: 5, fireworkShardPrevPoints: 3, fireworkShardBaseVel: 4, fireworkShardAddedVel: 2, fireworkShardBaseSize: 3, fireworkShardAddedSize: 3, gravity: .1, upFlow: -.1, letterContemplatingWaitTime: 360, balloonSpawnTime: 20, balloonBaseInflateTime: 10, balloonAddedInflateTime: 10, balloonBaseSize: 20, balloonAddedSize: 20, balloonBaseVel: .4, balloonAddedVel: .4, balloonBaseRadian: -( Math.PI / 2 - .5 ), balloonAddedRadian: -1,
+            strings: ['HAPPY', 'BIRTHDAY', nameUppercase], charSize: 30, charSpacing: 35, lineHeight: 40, fireworkPrevPoints: 10, fireworkBaseLineWidth: 5, fireworkAddedLineWidth: 8, fireworkSpawnTime: 200, fireworkBaseReachTime: 30, fireworkAddedReachTime: 30, fireworkCircleBaseSize: 20, fireworkCircleAddedSize: 10, fireworkCircleBaseTime: 30, fireworkCircleAddedTime: 30, fireworkCircleFadeBaseTime: 10, fireworkCircleFadeAddedTime: 5, fireworkBaseShards: 2, fireworkAddedShards: 2, fireworkShardPrevPoints: 3, fireworkShardBaseVel: 4, fireworkShardAddedVel: 2, fireworkShardBaseSize: 3, fireworkShardAddedSize: 3, gravity: .1, upFlow: -.1, letterContemplatingWaitTime: 360
         };
-        
-        const calc = {
-          // MODIFIED: Tăng charSpacing cho tên người nhận để tạo khoảng cách
-          nameCharSpacing: opts.charSpacing * 1.5, // 1.5x khoảng cách bình thường
-          totalWidth: opts.charSpacing * Math.max( 
-            opts.strings[0].length, 
-            opts.strings[1].length,
-            opts.strings[2].length
-          )
-        };
-        
+        const calc = { nameCharSpacing: opts.charSpacing * 1.5, totalWidth: opts.charSpacing * Math.max(opts.strings[0].length, opts.strings[1].length, opts.strings[2].length) };
         const Tau = Math.PI * 2;
-        const TauQuarter = Tau / 4;
-        
         const letters = [];
-
-        // ĐẶT LẠI ctx.font cho đo lường cơ bản
-        ctx.font = opts.charSize + 'px Verdana';
-
-        function Letter( char, x, y, lineIndex, currentLineLength ){
-            this.char = char;
-            this.x = x;
-            this.y = y;
-            
-            this.lineIndex = lineIndex;
-            this.fontSize = (lineIndex === 2) ? opts.charSize * 2 : opts.charSize; // Tên 2x size
-            
-            // Recalculate dx (horizontal offset for centering) based on individual font size
-            ctx.font = this.fontSize + 'px Verdana';
-            this.dx = -ctx.measureText( char ).width / 2;
-            this.dy = +this.fontSize / 2;
-            
-            this.fireworkDy = this.y - hh;
-            
-            var hue = x / calc.totalWidth * 360;
-            
-            this.color = 'hsl(hue,80%,50%)'.replace( 'hue', hue );
-            this.lightAlphaColor = 'hsla(hue,80%,light%,alp)'.replace( 'hue', hue );
-            this.lightColor = 'hsl(hue,80%,light%)'.replace( 'hue', hue );
-            this.alphaColor = 'hsla(hue,80%,50%,alp)'.replace( 'hue', hue );
-            
-            this.reset();
+        ctx.font = opts.charSize + 'px ' + FONT_NAME;
+        function Letter(char, x, y, lineIndex) {
+            this.char = char; this.x = x; this.y = y; this.lineIndex = lineIndex; this.fontSize = (lineIndex === 2) ? opts.charSize * 2.5 : opts.charSize * 1.2;
+            ctx.font = this.fontSize + 'px ' + FONT_NAME; this.dx = -ctx.measureText(char).width / 2; this.dy = +this.fontSize / 2; this.fireworkDy = this.y - hh;
+            var hue = x / calc.totalWidth * 360; this.color = `hsl(${hue},90%,65%)`; this.lightAlphaColor = `hsla(${hue},90%,light%,alp)`; this.lightColor = `hsl(${hue},90%,light%)`; this.alphaColor = `hsla(${hue},90%,65%,alp)`;
+            this.reset = function() { this.phase = 'firework'; this.tick = 0; this.spawned = false; this.spawningTime = opts.fireworkSpawnTime * Math.random() | 0; this.reachTime = opts.fireworkBaseReachTime + opts.fireworkAddedReachTime * Math.random() | 0; this.lineWidth = opts.fireworkBaseLineWidth + opts.fireworkAddedLineWidth * Math.random(); this.prevPoints = [[0, hh, 0]]; }; this.reset();
+            this.step = function() { if (this.phase === 'firework') { if (!this.spawned) { if (++this.tick >= this.spawningTime) { this.tick = 0; this.spawned = true; } } else { ++this.tick; let linProp = this.tick / this.reachTime, armProp = Math.sin(linProp * (Tau / 4)), x = linProp * this.x, y = hh + armProp * this.fireworkDy; if (this.prevPoints.length > opts.fireworkPrevPoints) this.prevPoints.shift(); this.prevPoints.push([x, y, linProp * this.lineWidth]); for (let i = 1; i < this.prevPoints.length; ++i) { let p = this.prevPoints[i], p2 = this.prevPoints[i - 1]; ctx.strokeStyle = this.alphaColor.replace('alp', i / this.prevPoints.length); ctx.lineWidth = p[2] * (1 / (this.prevPoints.length - 1)) * i; ctx.beginPath(); ctx.moveTo(p[0], p[1]); ctx.lineTo(p2[0], p2[1]); ctx.stroke(); } if (this.tick >= this.reachTime) { this.phase = 'contemplate'; this.circleFinalSize = opts.fireworkCircleBaseSize + opts.fireworkCircleAddedSize * Math.random(); this.circleCompleteTime = opts.fireworkCircleBaseTime + opts.fireworkCircleAddedTime * Math.random() | 0; this.circleCreating = true; this.circleFading = false; this.circleFadeTime = opts.fireworkCircleFadeBaseTime + opts.fireworkCircleFadeAddedTime * Math.random() | 0; this.tick = 0; this.tick2 = 0; this.shards = []; let shardCount = opts.fireworkBaseShards + opts.fireworkAddedShards * Math.random() | 0, angle = Tau / shardCount, cos = Math.cos(angle), sin = Math.sin(angle), x = 1, y = 0; for (let i = 0; i < shardCount; ++i) { let x1 = x; x = x * cos - y * sin; y = y * cos + x1 * sin; this.shards.push(new Shard(this.x, this.y, x, y, this.alphaColor)); } } } } else if (this.phase === 'contemplate') { ++this.tick; if (this.circleCreating) { ++this.tick2; let p = this.tick2 / this.circleCompleteTime, a = -Math.cos(p * Math.PI) / 2 + .5; ctx.fillStyle = this.lightAlphaColor.replace('light', 50 + 50 * p).replace('alp', p); ctx.beginPath(); ctx.arc(this.x, this.y, a * this.circleFinalSize, 0, Tau); ctx.fill(); if (this.tick2 > this.circleCompleteTime) { this.tick2 = 0; this.circleCreating = false; this.circleFading = true; } } else if (this.circleFading) { ctx.font = this.fontSize + 'px ' + FONT_NAME; ctx.fillStyle = this.lightColor.replace('light', 70); ctx.fillText(this.char, this.x + this.dx, this.y + this.dy); ++this.tick2; let p = this.tick2 / this.circleFadeTime, a = -Math.cos(p * Math.PI) / 2 + .5; ctx.fillStyle = this.lightAlphaColor.replace('light', 100).replace('alp', 1 - a); ctx.beginPath(); ctx.arc(this.x, this.y, this.circleFinalSize, 0, Tau); ctx.fill(); if (this.tick2 >= this.circleFadeTime) this.circleFading = false; } else { ctx.font = this.fontSize + 'px ' + FONT_NAME; ctx.fillStyle = this.lightColor.replace('light', 70); ctx.fillText(this.char, this.x + this.dx, this.y + this.dy); } for (let i = 0; i < this.shards.length; ++i) { this.shards[i].step(); if (!this.shards[i].alive) { this.shards.splice(i, 1); --i; } } if (this.tick > opts.letterContemplatingWaitTime) { this.phase = 'done'; } } };
         }
-        
-        Letter.prototype.reset = function(){
-            this.phase = 'firework';
-            this.tick = 0;
-            this.spawned = false;
-            this.spawningTime = opts.fireworkSpawnTime * Math.random() |0;
-            this.reachTime = opts.fireworkBaseReachTime + opts.fireworkAddedReachTime * Math.random() |0;
-            this.lineWidth = opts.fireworkBaseLineWidth + opts.fireworkAddedLineWidth * Math.random();
-            this.prevPoints = [ [ 0, hh, 0 ] ];
-        }
-        
-        Letter.prototype.step = function(){
-            if( this.phase === 'firework' ){
-                if( !this.spawned ){
-                    ++this.tick;
-                    if( this.tick >= this.spawningTime ){
-                        this.tick = 0;
-                        this.spawned = true;
-                    }
-                } else {
-                    ++this.tick;
-                    
-                    var linearProportion = this.tick / this.reachTime,
-                            armonicProportion = Math.sin( linearProportion * TauQuarter ),
-                            
-                            x = linearProportion * this.x,
-                            y = hh + armonicProportion * this.fireworkDy;
-                    
-                    if( this.prevPoints.length > opts.fireworkPrevPoints )
-                        this.prevPoints.shift();
-                    
-                    this.prevPoints.push( [ x, y, linearProportion * this.lineWidth ] );
-                    
-                    var lineWidthProportion = 1 / ( this.prevPoints.length - 1 );
-                    
-                    for( var i = 1; i < this.prevPoints.length; ++i ){
-                        var point = this.prevPoints[ i ],
-                                point2 = this.prevPoints[ i - 1 ];
-                            
-                        ctx.strokeStyle = this.alphaColor.replace( 'alp', i / this.prevPoints.length );
-                        ctx.lineWidth = point[ 2 ] * lineWidthProportion * i;
-                        ctx.beginPath();
-                        ctx.moveTo( point[ 0 ], point[ 1 ] );
-                        ctx.lineTo( point2[ 0 ], point2[ 1 ] );
-                        ctx.stroke();
-                    }
-                    
-                    if( this.tick >= this.reachTime ){
-                        this.phase = 'contemplate';
-                        
-                        this.circleFinalSize = opts.fireworkCircleBaseSize + opts.fireworkCircleAddedSize * Math.random();
-                        this.circleCompleteTime = opts.fireworkCircleBaseTime + opts.fireworkCircleAddedTime * Math.random() |0;
-                        this.circleCreating = true;
-                        this.circleFading = false;
-                        
-                        this.circleFadeTime = opts.fireworkCircleFadeBaseTime + opts.fireworkCircleFadeAddedTime * Math.random() |0;
-                        this.tick = 0;
-                        this.tick2 = 0;
-                        
-                        this.shards = [];
-                        
-                        var shardCount = opts.fireworkBaseShards + opts.fireworkAddedShards * Math.random() |0,
-                                angle = Tau / shardCount,
-                                cos = Math.cos( angle ),
-                                sin = Math.sin( angle ),
-                                
-                                x = 1,
-                                y = 0;
-                        
-                        for( var i = 0; i < shardCount; ++i ){
-                            var x1 = x;
-                            x = x * cos - y * sin;
-                            y = y * cos + x1 * sin;
-                            
-                            this.shards.push( new Shard( this.x, this.y, x, y, this.alphaColor ) );
-                        }
-                    }
-                }
-            } else if( this.phase === 'contemplate' ){
-                ++this.tick;
-                
-                if( this.circleCreating ){
-                    ++this.tick2;
-                    var proportion = this.tick2 / this.circleCompleteTime,
-                            armonic = -Math.cos( proportion * Math.PI ) / 2 + .5;
-                    
-                    ctx.beginPath();
-                    ctx.fillStyle = this.lightAlphaColor.replace( 'light', 50 + 50 * proportion ).replace( 'alp', proportion );
-                    ctx.beginPath();
-                    ctx.arc( this.x, this.y, armonic * this.circleFinalSize, 0, Tau );
-                    ctx.fill();
-                    
-                    if( this.tick2 > this.circleCompleteTime ){
-                        this.tick2 = 0;
-                        this.circleCreating = false;
-                        this.circleFading = true;
-                    }
-                } else if( this.circleFading ){
-                    // Áp dụng font size riêng
-                    ctx.font = this.fontSize + 'px Verdana'; 
-                    ctx.fillStyle = this.lightColor.replace( 'light', 70 );
-                    ctx.fillText( this.char, this.x + this.dx, this.y + this.dy );
-                    
-                    ++this.tick2;
-                    var proportion = this.tick2 / this.circleFadeTime,
-                            armonic = -Math.cos( proportion * Math.PI ) / 2 + .5;
-                    
-                    ctx.beginPath();
-                    ctx.fillStyle = this.lightAlphaColor.replace( 'light', 100 ).replace( 'alp', 1 - armonic );
-                    ctx.arc( this.x, this.y, this.circleFinalSize, 0, Tau );
-                    ctx.fill();
-                    
-                    // Chỉ vẽ lại chữ nếu chưa kết thúc fading
-                    if( this.tick2 >= this.circleFadeTime )
-                        this.circleFading = false;
-                    else {
-                        ctx.font = this.fontSize + 'px Verdana'; 
-                        ctx.fillStyle = this.lightColor.replace( 'light', 70 );
-                        ctx.fillText( this.char, this.x + this.dx, this.y + this.dy );
-                    }
-                    
-                } else {
-                    // Trạng thái tĩnh: chỉ vẽ chữ (đã fix lỗi nháy trắng)
-                    ctx.font = this.fontSize + 'px Verdana'; 
-                    ctx.fillStyle = this.lightColor.replace( 'light', 70 );
-                    ctx.fillText( this.char, this.x + this.dx, this.y + this.dy );
-                }
-                
-                // Đặt lại font size mặc định cho các đối tượng khác
-                ctx.font = opts.charSize + 'px Verdana'; 
-
-                for( var i = 0; i < this.shards.length; ++i ){
-                    this.shards[ i ].step();
-                    if( !this.shards[ i ].alive ){
-                        this.shards.splice( i, 1 );
-                        --i;
-                    }
-                }
-                
-                if( this.tick > opts.letterContemplatingWaitTime ){
-                    this.phase = 'balloon';
-                    
-                    this.tick = 0;
-                    this.spawning = true;
-                    this.spawnTime = opts.balloonSpawnTime * Math.random() |0;
-                    this.inflating = false;
-                    this.inflateTime = opts.balloonBaseInflateTime + opts.balloonAddedInflateTime * Math.random() |0;
-                    this.size = opts.balloonBaseSize + opts.balloonAddedSize * Math.random() |0;
-                    
-                    var rad = opts.balloonBaseRadian + opts.balloonAddedRadian * Math.random(),
-                            vel = opts.balloonBaseVel + opts.balloonAddedVel * Math.random();
-                    
-                    this.vx = Math.cos( rad ) * vel;
-                    this.vy = Math.sin( rad ) * vel;
-                }
-            } else if( this.phase === 'balloon' ){
-                    
-                ctx.strokeStyle = this.lightColor.replace( 'light', 80 );
-                
-                if( this.spawning ){
-                    ++this.tick;
-                    // Áp dụng font size riêng
-                    ctx.font = this.fontSize + 'px Verdana'; 
-                    ctx.fillStyle = this.lightColor.replace( 'light', 70 );
-                    ctx.fillText( this.char, this.x + this.dx, this.y + this.dy );
-                    ctx.font = opts.charSize + 'px Verdana'; // Revert
-                    
-                    if( this.tick >= this.spawnTime ){
-                        this.tick = 0;
-                        this.spawning = false;
-                        this.inflating = true;	
-                    }
-                } else if( this.inflating ){
-                    ++this.tick;
-                    
-                    var proportion = this.tick / this.inflateTime,
-                        x = this.cx = this.x,
-                            y = this.cy = this.y - this.size * proportion;
-                    
-                    ctx.fillStyle = this.alphaColor.replace( 'alp', proportion );
-                    ctx.beginPath();
-                    generateBalloonPath( x, y, this.size * proportion );
-                    ctx.fill();
-                    
-                    ctx.beginPath();
-                    ctx.moveTo( x, y );
-                    ctx.lineTo( x, this.y );
-                    ctx.stroke();
-                    
-                    // Áp dụng font size riêng
-                    ctx.font = this.fontSize + 'px Verdana'; 
-                    ctx.fillStyle = this.lightColor.replace( 'light', 70 );
-                    ctx.fillText( this.char, this.x + this.dx, this.y + this.dy );
-                    ctx.font = opts.charSize + 'px Verdana'; // Revert
-                    
-                    if( this.tick >= this.inflateTime ){
-                        this.tick = 0;
-                        this.inflating = false;
-                    }
-                    
-                } else {
-                    this.cx += this.vx;
-                    this.cy += this.vy += opts.upFlow;
-                    
-                    ctx.fillStyle = this.color;
-                    ctx.beginPath();
-                    generateBalloonPath( this.cx, this.cy, this.size );
-                    ctx.fill();
-                    
-                    ctx.beginPath();
-                    ctx.moveTo( this.cx, this.cy );
-                    ctx.lineTo( this.cx, this.cy + this.size );
-                    ctx.stroke();
-                    
-                    // Áp dụng font size riêng
-                    ctx.font = this.fontSize + 'px Verdana'; 
-                    ctx.fillStyle = this.lightColor.replace( 'light', 70 );
-                    ctx.fillText( this.char, this.cx + this.dx, this.cy + this.dy + this.size );
-                    ctx.font = opts.charSize + 'px Verdana'; // Revert
-                    
-                    if( this.cy + this.size < -hh || this.cx < -hw || this.cy > hw  )
-                        this.phase = 'done';
-                }
-            }
-        }
-        
-        function Shard( x, y, vx, vy, color ){
-            var vel = opts.fireworkShardBaseVel + opts.fireworkShardAddedVel * Math.random();
-            this.vx = vx * vel;
-            this.vy = vy * vel;
-            this.x = x;
-            this.y = y;
-            this.prevPoints = [ [ x, y ] ];
-            this.color = color;
-            this.alive = true;
-            this.size = opts.fireworkShardBaseSize + opts.fireworkShardAddedSize * Math.random();
-        }
-        
-        Shard.prototype.step = function(){
-            this.x += this.vx;
-            this.y += this.vy += opts.gravity;
-            
-            if( this.prevPoints.length > opts.fireworkShardPrevPoints )
-                this.prevPoints.shift();
-            
-            this.prevPoints.push( [ this.x, this.y ] );
-            
-            var lineWidthProportion = this.size / this.prevPoints.length;
-            
-            for( var k = 0; k < this.prevPoints.length - 1; ++k ){
-                var point = this.prevPoints[ k ],
-                        point2 = this.prevPoints[ k + 1 ];
-                
-                ctx.strokeStyle = this.color.replace( 'alp', k / this.prevPoints.length );
-                ctx.lineWidth = k * lineWidthProportion;
-                ctx.beginPath();
-                ctx.moveTo( point[ 0 ], point[ 1 ] );
-                ctx.lineTo( point2[ 0 ], point2[ 1 ] );
-                ctx.stroke();
-            }
-            
-            if( this.prevPoints[ 0 ][ 1 ] > hh )
-                this.alive = false;
-        }
-        
-        function generateBalloonPath( x, y, size ){
-            ctx.moveTo( x, y );
-            ctx.bezierCurveTo( x - size / 2, y - size / 2,
-                                             x - size / 4, y - size,
-                                           x,            y - size );
-            ctx.bezierCurveTo( x + size / 4, y - size,
-                                           x + size / 2, y - size / 2,
-                                           x,            y );
-        }
-
-        // ĐIỀU CHỈNH: Tính toán vị trí X và Y thủ công cho 3 dòng, dòng 3 lớn hơn và có khoảng cách
-        for( var i = 0; i < opts.strings.length; ++i ){
-            let customY;
-            const lineLength = opts.strings[i].length;
-            let currentX = 0;
-            const isNameLine = (i === 2);
-            const charSpacing = isNameLine ? calc.nameCharSpacing : opts.charSpacing;
-            
-            // Tính toán điểm bắt đầu X (căn giữa)
-            const totalWidth = lineLength * charSpacing;
-            let startX = -totalWidth / 2 + charSpacing / 2;
-            
-            // Vị trí Y
-            if (i === 0) customY = -40; // HAPPY (30px)
-            else if (i === 1) customY = 0;  // BIRTHDAY (30px)
-            else if (i === 2) customY = 60; // NAME (60px)
-            
-            for( var j = 0; j < lineLength; ++j ){
-                letters.push( new Letter( opts.strings[ i ][ j ], 
-                                                        startX + j * charSpacing, // Sử dụng charSpacing mới
-                                                        customY, 
-                                                        i,
-                                                        lineLength ) );
-            }
-        }
-        
-        function anim(){
-            window.requestAnimationFrame( anim );
-            
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'; // Sử dụng fillStyle này để tạo trail effect
-            ctx.fillRect( 0, 0, w, h );
-            
-            ctx.translate( hw, hh );
-            
-            var done = true;
-            for( var l = 0; l < letters.length; ++l ){
-                letters[ l ].step();
-                if( letters[ l ].phase !== 'done' )
-                    done = false;
-            }
-            
-            ctx.translate( -hw, -hh );
-            
-            if( done ) {
-                // Kết thúc hiệu ứng pháo hoa, chuyển sang cảnh bánh kem
-                setTimeout(() => {
-                    birthdaySection.classList.add('hidden');
-                    stopConfetti(); // Dừng hiệu ứng Dots
-                    cakeSection.classList.remove('hidden'); // Hiển thị cảnh bánh kem và thư
-                }, 1000);
-                // Dừng vòng lặp animation sau khi chuyển cảnh
-                return;
-            }
-        }
-
-        anim();
-        
-        // Cần thêm xử lý resize để không làm hỏng hiệu ứng
-        window.addEventListener( 'resize', function(){
-            w = c.width = window.innerWidth;
-            h = c.height = window.innerHeight;
-            hw = w / 2;
-            hh = h / 2;
-            // Đặt lại font size mặc định cho các đối tượng khác
-            ctx.font = opts.charSize + 'px Verdana'; 
-        });
+        function Shard(x, y, vx, vy, color) { let vel = opts.fireworkShardBaseVel + opts.fireworkShardAddedVel * Math.random(); this.vx = vx * vel; this.vy = vy * vel; this.x = x; this.y = y; this.prevPoints = [[x, y]]; this.color = color; this.alive = true; this.size = opts.fireworkShardBaseSize + opts.fireworkShardAddedSize * Math.random(); this.step = function() { this.x += this.vx; this.y += this.vy += opts.gravity; if (this.prevPoints.length > opts.fireworkShardPrevPoints) this.prevPoints.shift(); this.prevPoints.push([this.x, this.y]); for (let k = 0; k < this.prevPoints.length - 1; ++k) { let p = this.prevPoints[k], p2 = this.prevPoints[k + 1]; ctx.strokeStyle = this.color.replace('alp', k / this.prevPoints.length); ctx.lineWidth = k * (this.size / this.prevPoints.length); ctx.beginPath(); ctx.moveTo(p[0], p[1]); ctx.lineTo(p2[0], p2[1]); ctx.stroke(); } if (this.prevPoints[0][1] > hh) this.alive = false; }; }
+        for (let i = 0; i < opts.strings.length; ++i) { let len = opts.strings[i].length, isName = (i === 2), spacing = isName ? calc.nameCharSpacing : opts.charSpacing, startX = -(len * spacing) / 2 + spacing / 2, customY = (i === 0) ? -60 : (i === 1) ? -15 : 65; for (let j = 0; j < len; ++j) letters.push(new Letter(opts.strings[i][j], startX + j * spacing, customY, i)); }
+        let animLoop = function() { window.requestAnimationFrame(animLoop); ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'; ctx.fillRect(0, 0, w, h); ctx.translate(hw, hh); let done = true; for (let l = 0; l < letters.length; ++l) { letters[l].step(); if (letters[l].phase !== 'done') done = false; } ctx.translate(-hw, -hh); if (done) { setTimeout(() => { birthdaySection.classList.add('hidden'); stopConfetti(); cakeSection.classList.remove('hidden');}, 1000); return; } }; animLoop();
+        window.addEventListener('resize', () => { c.width = w = window.innerWidth; c.height = h = window.innerHeight; hw = w / 2; hh = h / 2; ctx.font = opts.charSize + 'px ' + FONT_NAME; });
       }
 
-      // --- LOGIC MỞ/ĐÓNG LÁ THƯ MODAL (MODIFIED) ---
+      // --- LETTER MODAL LOGIC ---
       letterContainerStatic.addEventListener('click', function() {
         letterModal.classList.add('active');
-        
-        // 1. Mở nắp phong bì trong Modal
         setTimeout(() => {
             letterModalEnvelope.classList.add('letter-open');
-            
-            // 2. Trượt nội dung thư lên sau khi mở nắp
-            setTimeout(() => {
-                letterModalContent.classList.add('show');
-            }, 800);
-        }, 300); // Độ trễ nhỏ để Modal fade in
+            setTimeout(() => letterModalContent.classList.add('show'), 800);
+        }, 300);
       });
-
-      modalCloseBtn.addEventListener('click', closeModal);
-      
-      // Xử lý đóng Modal
       function closeModal() {
-        // 1. Trượt nội dung thư xuống
         letterModalContent.classList.remove('show');
-        
-        // 2. Đóng nắp phong bì sau khi nội dung thư ẩn
         setTimeout(() => {
             letterModalEnvelope.classList.remove('letter-open');
-            
-            // 3. Ẩn Modal overlay
-            setTimeout(() => {
-                letterModal.classList.remove('active');
-            }, 800); // Phù hợp với transition của nắp phong bì
-        }, 300); // Độ trễ nhỏ trước khi đóng nắp
+            setTimeout(() => letterModal.classList.remove('active'), 800);
+        }, 300);
       }
-
-      // Xử lý đóng Modal khi click ra ngoài (Chỉ đóng khi click chính xác vào overlay)
-      letterModal.addEventListener('click', function(e) {
-        if (e.target === letterModal) {
-            closeModal();
-        }
-      });
+      modalCloseBtn.addEventListener('click', closeModal);
+      letterModal.addEventListener('click', e => { if (e.target === letterModal) closeModal(); });
       
-      // Khởi tạo preview
-      updatePreview();
     });
   </script>
 </body>
 </html>
+
