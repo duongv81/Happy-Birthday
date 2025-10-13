@@ -128,6 +128,55 @@
         resize: vertical;
     }
     
+    /* === FIX: Added Styles for Image Preview Section === */
+    .selected-preview {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        border: 1px solid #e0e0e0;
+    }
+    .selected-preview h4 {
+        margin-bottom: 10px;
+        color: #333;
+    }
+    #selected-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .selected-item {
+        position: relative;
+        width: 80px;
+        height: 80px;
+    }
+    .selected-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 2px solid #ddd;
+    }
+    .remove-cloudinary {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        width: 20px;
+        height: 20px;
+        background-color: red;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        line-height: 1;
+        padding: 0;
+    }
+    /* === END FIX === */
+
     /* Button Styles */
     .btn {
         background: #28a745;
@@ -445,7 +494,7 @@
       width: 90%;
       max-width: 1000px;
       position: relative;
-      z-index: 31; /* Above decorations */
+      z-index: 31;
     }
     .cake-content {
         display: flex;
@@ -884,15 +933,20 @@
       const userNameInput = document.getElementById('user-name');
       const recipientNameInput = document.getElementById('recipient-name');
       const messageInput = document.getElementById('valentine-message');
+      const selectedImagesPreview = document.getElementById('selected-images-preview');
+      const selectedContainer = document.getElementById('selected-container');
       const uploadBtn = document.getElementById('upload-btn');
       
+      // NEW GEMINI ELEMENTS
       const generateWishBtn = document.getElementById('generate-wish-btn');
       const enhanceWishBtn = document.getElementById('enhance-wish-btn');
       
+      // NEW MUSIC ELEMENTS
       const uploadMusicBtn = document.getElementById('upload-music-btn');
       const musicPreview = document.getElementById('music-preview');
       const backgroundMusic = document.getElementById('background-music');
       
+      // NEW START SCREEN ELEMENTS
       const startScreen = document.getElementById('startScreen');
       const startScreenTitle = document.getElementById('start-screen-title');
       const startFlowBtn = document.getElementById('start-flow-btn');
@@ -1008,6 +1062,7 @@
         if (error) console.error('Upload error (Image):', error);
         if (result && result.event === "success") {
           uploadedCloudinaryImages.push(result.info.secure_url);
+          updateSelectedImages();
         }
       });
       uploadBtn.addEventListener('click', () => cloudinaryWidgetImage.open());
@@ -1022,6 +1077,31 @@
         }
       });
       uploadMusicBtn.addEventListener('click', () => cloudinaryWidgetMusic.open());
+
+      function updateSelectedImages() {
+        selectedContainer.innerHTML = '';
+        if (uploadedCloudinaryImages.length > 0) {
+          selectedImagesPreview.classList.remove('hidden');
+          uploadedCloudinaryImages.forEach((imgSrc, index) => {
+            const imgItem = document.createElement('div');
+            imgItem.className = 'selected-item';
+            const img = document.createElement('img');
+            img.src = imgSrc;
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'remove-cloudinary';
+            removeBtn.innerHTML = '×';
+            removeBtn.onclick = function() {
+              uploadedCloudinaryImages.splice(index, 1);
+              updateSelectedImages();
+            };
+            imgItem.appendChild(img);
+            imgItem.appendChild(removeBtn);
+            selectedContainer.appendChild(imgItem);
+          });
+        } else {
+          selectedImagesPreview.classList.add('hidden');
+        }
+      }
 
       // --- FORM LOGIC ---
       createBtn.addEventListener('click', function() {
@@ -1210,4 +1290,5 @@
   </script>
 </body>
 </html>
+" with a query of "sửa lỗi hiển thị phần thêm ảnh, và trang chỉ hiển thị những ảnh và nhạc vừa nhập".
 
