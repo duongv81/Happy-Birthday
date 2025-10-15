@@ -1239,7 +1239,7 @@
           <div class="input-group">
             <label>Upload Nhạc Nền (File Audio):</label>
             <button type="button" id="upload-music-btn" class="btn">🎵 Upload Nhạc Nền</button>
-            <small id="music-preview" class="block mt-2 text-sm text-gray-500">Chưa có nhạc nền được chọn.</small>
+            <small id="music-preview" class="block mt-2 text-sm text-gray-500">Nhạc mặc định: Chúc mừng sinh nhật (Piano). Bấm Upload để thay đổi.</small>
           </div>
           
           <div id="selected-images-preview" class="selected-preview hidden">
@@ -1312,7 +1312,7 @@
           <div class="smoke" id="smoke-puff"></div>
           <div class="candle-body"></div>
       </div>
-      <p class="instruction" id="candle-instruction">Hãy thổi nến nào!</p>
+      <p class="instruction" id="candle-instruction">Hãy thổi nến sau 3s!</p>
       <div class="countdown" id="countdown">3</div>
     </div>
 
@@ -1568,7 +1568,10 @@
         const recipientName = recipientNameInput.value.trim() || 'Người Đặc Biệt';
         const message = messageInput.value.trim() || 'Chúc mừng sinh nhật! Mong bạn có một ngày thật vui vẻ và hạnh phúc.';
         
-        const valentineData = { userName, recipientName, message, images: uploadedCloudinaryImages, musicUrl: uploadedMusicUrl };
+        // If no music is uploaded, use the default one.
+        const finalMusicUrl = uploadedMusicUrl || 'nhacnen.mp3';
+
+        const valentineData = { userName, recipientName, message, images: uploadedCloudinaryImages, musicUrl: finalMusicUrl };
         const encodedData = btoa(encodeURIComponent(JSON.stringify(valentineData)));
         const shareUrl = `${window.location.origin}${window.location.pathname}?data=${encodedData}`;
         
@@ -1938,4 +1941,3 @@
   </script>
 </body>
 </html>
-
