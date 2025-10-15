@@ -7,6 +7,7 @@
   <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
   <style>
     /* Global Styles */
     * {
@@ -17,14 +18,27 @@
     }
 
     body {
-      background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+      font-family: 'Quicksand', 'Poppins', 'Arial', sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       padding: 20px;
-      color: #333;
+      color: #4b5563; /* similar to text-gray-600/800 */
       overflow-x: hidden;
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" style="font-size: 24px;"><text y="24">💖</text></svg>') 16 16, auto;
+    }
+
+    /* Animated gradient background like 111.html */
+    .gradient-bg {
+      background: linear-gradient(300deg, #fce7f3, #e9d5ff, #fecdd3);
+      background-size: 240% 240%;
+      animation: gradient-animation 12s ease infinite;
+    }
+    @keyframes gradient-animation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     .container {
@@ -39,7 +53,7 @@
     }
 
     header {
-      background: #ff4d6d;
+      background: #df9fab;
       color: white;
       text-align: center;
       padding: 20px;
@@ -48,11 +62,13 @@
     h1 {
       font-size: 2.5rem;
       margin-bottom: 10px;
+      color: #ffffff; /* text-pink-600 in Tailwind */
     }
 
     .subtitle {
       font-size: 1.2rem;
       opacity: 0.9;
+      color: #ffffff;
     }
 
     .content {
@@ -96,7 +112,7 @@
         margin-bottom: 30px;
     }
     h2 {
-        color: #ff4d6d;
+        color: #db2777;
         margin-bottom: 15px;
         font-size: 1.5rem;
     }
@@ -219,16 +235,17 @@
         box-shadow: 0 6px 20px rgba(108, 117, 125, 0.4);
     }
     .start-btn { 
-        background: #ffd700;
-        color: #333;
+        background: linear-gradient(135deg, #f472b6, #db2777);
+        color: #ffffff;
         font-size: 1.5rem;
         padding: 20px 40px;
-        box-shadow: 0 4px 20px rgba(255, 215, 0, 0.5);
+        border: 2px solid rgba(255,255,255,0.35);
+        box-shadow: 0 8px 24px rgba(219, 39, 119, 0.35);
     }
     .start-btn:hover {
-        background: #ffc107;
+        background: linear-gradient(135deg, #ec4899, #be185d);
         transform: translateY(-4px);
-        box-shadow: 0 8px 25px rgba(255, 215, 0, 0.6);
+        box-shadow: 0 12px 30px rgba(219, 39, 119, 0.45);
     }
     .gemini-btn-group {
         display: flex;
@@ -255,7 +272,7 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: #98bec8;
+      background: transparent;
       color: white;
       z-index: 100;
       display: none;
@@ -275,8 +292,8 @@
     #startScreen h2 {
         font-family: 'Dancing Script', cursive;
         font-size: 4rem;
-        color: #ffd700;
-        text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        color: #db2777;
+        text-shadow: 0 0 10px rgba(219, 39, 119, 0.35);
         margin-bottom: 20px;
     }
     #startScreen p {
@@ -295,31 +312,39 @@
         align-items: center;
         perspective: 800px;
         justify-content: flex-end;
-        height: 100%;
+        width: 100vw;
+        min-height: 100vh;
         padding-bottom: 100px;
-        background-image: url('hinhanh/nen1.jpg');
-        background-size: cover;
-        background-position: center;
+        background: transparent;
     }
     .candle-holder {
         position: relative;
-        width: 80px;
+        width: 100px;
         display: flex;
         justify-content: center;
+        margin-bottom: 20px;
     }
     .candle-body {
-        width: 50px;
-        height: 150px;
-        background: repeating-linear-gradient(
-            45deg,
-            #ff7b7b,
-            #ff7b7b 8px,
-            #ffadad 8px,
-            #ffadad 16px
-        );
-        border-radius: 6px 6px 0 0;
+        width: 60px;
+        height: 220px;
+        background: linear-gradient(180deg, #ffb3c1 0%, #ff7b7b 40%, #ff9aa2 100%);
+        border-radius: 10px 10px 0 0;
         position: relative;
-        box-shadow: inset 0 -8px 12px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.2);
+        box-shadow: inset 0 -10px 16px rgba(0,0,0,0.18), 0 8px 18px rgba(0,0,0,0.25);
+        overflow: hidden;
+    }
+    .candle-body::after { /* subtle vertical pattern */
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(
+          90deg,
+          rgba(255,255,255,0.15) 0px,
+          rgba(255,255,255,0.15) 6px,
+          transparent 6px,
+          transparent 12px
+        );
+        pointer-events: none;
     }
     .candle-body::before { /* Dripping Wax Effect */
         content: '';
@@ -358,11 +383,11 @@
     }
     .new-flame-container {
         position: absolute;
-        top: -70px;
+        top: -90px;
         left: 50%;
         transform: translateX(-50%);
-        width: 40px;
-        height: 70px;
+        width: 48px;
+        height: 90px;
         transform-style: preserve-3d;
         animation: move-flame 3s infinite ease-in-out;
     }
@@ -376,21 +401,21 @@
         box-shadow: 0 0 20px 5px #ffae42, 0 0 40px 10px #ff7800, 0 0 60px 15px rgba(255, 50, 0, 0.7);
     }
     .flame-part.base {
-        width: 25px;
-        height: 60px;
+        width: 30px;
+        height: 80px;
         background: linear-gradient(to top, #ff7800, #ffae42);
         animation: scale-flame 1.5s infinite ease-in-out;
     }
     .flame-part.blue {
-        width: 16px;
-        height: 24px;
+        width: 18px;
+        height: 30px;
         background: #8ecae6;
         animation: scale-flame 2s infinite ease-in-out;
         box-shadow: 0 0 12px 4px #8ecae6;
     }
     .flame-part.glow { /* a subtle white-hot center */
-        width: 12px;
-        height: 40px;
+        width: 14px;
+        height: 55px;
         background: #fff;
         filter: blur(4px);
         animation: scale-flame 1s infinite ease-in-out;
@@ -431,15 +456,46 @@
       font-size: 2rem;
       margin-top: 20px; 
       text-align: center;
-      font-weight: bold;
-      color: #fff;
-      text-shadow: 0 0 5px #ff9800;
+      font-weight: 800;
+      color: #db2777;
+      text-shadow: 0 0 10px rgba(219,39,119,0.25);
+      display: none;
+    }
+    .instruction {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.2rem;
+      color: #db2777;
+      text-shadow: 0 0 10px rgba(219, 39, 119, 0.35);
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    /* Fly-in morph animation */
+    @keyframes fly-in-morph {
+      0% {
+        opacity: 0;
+        transform: translate(var(--sx, 0), var(--sy, -60vh)) scale(0.9);
+        filter: blur(6px);
+      }
+      60% {
+        opacity: 1;
+        transform: translate(calc(var(--sx, 0) * 0.05), calc(var(--sy, -60vh) * 0.05)) scale(1.02);
+        filter: blur(0px);
+      }
+      100% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+      }
+    }
+    .fly-in {
+      animation: fly-in-morph 900ms ease-out both;
+      will-change: transform, opacity, filter;
     }
     .instruction {
       font-family: 'Dancing Script', cursive;
       font-size: 2.5rem;
-      color: #ffd700;
-      text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+      color: #f472b6;
+      text-shadow: 0 0 10px rgba(179, 47, 139, 0.5);
       margin-bottom: 50px; 
       text-align: center;
     }
@@ -534,10 +590,24 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background-image: url('hinhanh/nen1.jpg');
-      background-size: cover;
-      background-position: center;
+      background: transparent;
       z-index: 30;
+    }
+
+    /* Top-center decoration image */
+    .top-decoration {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translate(-50%, -30%);
+      width: 40%;
+      max-width: 420px;
+      min-width: 220px;
+      height: auto;
+      z-index: 40;
+      pointer-events: none;
+      animation: fly-in-morph 1000ms ease-out both;
+      filter: drop-shadow(0 6px 18px rgba(0,0,0,0.25));
     }
 
     .cake-container {
@@ -568,11 +638,14 @@
     
     /* === NEW: Style for HPBD image === */
     .hpbd-image {
-      width: 90%;
-      max-width: 400px;
-      position: relative;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 30%;
+      max-width: 180px;
+      height: auto;
       z-index: 4;
-      margin-bottom: -15%; /* Adjust overlap with cake */
+      margin: 0;
       filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2));
     }
 
@@ -626,18 +699,24 @@
     /* === NEW: Letter from letter.html positioned next to cake === */
     #letterContainerStatic {
       position: absolute;
-      bottom: 25%;
+      bottom: 12%;
       left: 5%; 
-      transform: rotate(-15deg); 
       cursor: pointer;
       width: 160px;
       height: 140px;
       z-index: 35; 
+    }
+    #letterContainerStatic .letter-tilt {
+      transform: rotate(20deg);
+      transform-origin: 50% 80%;
       transition: transform 0.3s ease;
+    }
+    #letterContainerStatic:hover .letter-tilt {
+      transform: rotate(20deg) scale(1.05);
     }
     
     #letterContainerStatic:hover {
-        transform: rotate(-15deg) scale(1.05);
+        transform: rotate(20deg) scale(1.05);
     }
     
     /* Envelope container */
@@ -828,7 +907,7 @@
     #message-box {
       position: relative;
       width: 90vw;
-      max-width: 500px;
+      max-width: 560px;
       background: rgba(255, 255, 255, 0.98);
       color: #333;
       border-radius: 20px;
@@ -841,7 +920,7 @@
       z-index: 20;
       display: none;
       flex-direction: column;
-      padding: 30px;
+      padding: 28px 28px 32px 28px;
     }
     #message-box.show {
       display: flex;
@@ -918,18 +997,33 @@
         font-family: 'Dancing Script', cursive;
         font-weight: bold;
         font-size: 2.2rem;
-        color: #ff4d6d;
-        margin-bottom: 20px;
-        margin-right: 100px;
+        color: #db2777;
+        margin-bottom: 14px;
+        margin-right: 0;
+        text-align: left;
     }
     
     .letter-content-message {
         font-family: 'Dancing Script', cursive;
-        font-size: 1.6rem;
+        font-size: 1.45rem;
         line-height: 1.8;
-        text-align: left;
-        margin-right: 100px;
-        color: #333;
+        text-align: justify;
+        color: #444;
+        text-wrap: pretty;
+        hyphens: auto;
+        margin-right: 0;
+    }
+    .letter-content-message .right-shape {
+        float: right;
+        width: 140px;
+        height: 5.4em;
+        shape-outside: inset(0);
+        pointer-events: none;
+    }
+    .letter-content-message::after {
+        content: '';
+        display: table;
+        clear: both;
     }
     
     .letter-content-message .greeting {
@@ -956,21 +1050,23 @@
     .letter-content-title {
         font-weight: bold;
         font-size: 1.8rem;
-        color: #ff4d6d;
-        margin-bottom: 20px;
+        color: #db2777;
+        margin-bottom: 16px;
     }
     .letter-content-message {
-        font-size: 1.5rem;
-        line-height: 1.7;
-        text-align: center;
+        font-size: 1.4rem;
+        line-height: 1.75;
+        text-align: justify;
     }
     
     .recipient-name-display {
         font-family: 'Dancing Script', cursive;
-        font-size: 3.5rem;
+        font-size: 4rem; /* similar to 111.html heading scale */
+        font-weight: bold;
+        line-height: 1.1;
         text-align: center;
-        color: white;
-        text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        color: #db2777; /* match 111.html text-pink-600 */
+        text-shadow: none; /* keep clean like 111.html */
         margin-bottom: 20px;
     }
     
@@ -1019,11 +1115,15 @@
     /* Responsive adjustments */
     @media only screen and (max-width: 768px) {
         #letterContainerStatic {
-            bottom: 5%;
-            left: 50%;
-            transform: translateX(-50%) rotate(0deg);
+            bottom: 15%;
+            left: 20%;
+            transform: translateX(-50%);
             width: 160px;
             height: 140px;
+        }
+        #letterContainerStatic .letter-tilt {
+            transform: rotate(20deg);
+            transform-origin: 50% 80%;
         }
         .cake-content {
             flex-direction: column;
@@ -1098,7 +1198,7 @@
     }
   </style>
 </head>
-<body>
+<body class="gradient-bg">
   <!-- Loading Overlay for API Calls -->
   <div id="loading-overlay">
     <div class="spinner"></div>
@@ -1107,17 +1207,17 @@
   
   <div class="container" id="main-container">
     <header>
-      <h1>🎂 Happy Birthday Cá Nhân Hóa 🎂</h1>
-      <p class="subtitle">Tạo trang Birthday đặc biệt dành cho người ấy</p>
+      <h1>🎂 Happy birthday 🎂</h1>
+      <p class="subtitle">Tạo trang Birthday đặc biệt</p>
     </header>
     
     <div class="content">
       <!-- Creation Form -->
       <div id="creation-section">
         <div class="form-section">
-          <h2>Thông tin của bạn</h2>
+          <h2>Thông tin </h2>
           <div class="input-group">
-            <label for="user-name">Tên của bạn</label>
+            <label for="user-name">Tên người gửi</label>
             <input type="text" id="user-name" placeholder="Nhập tên của bạn">
           </div>
           
@@ -1130,8 +1230,8 @@
         <div class="form-section">
           <h2>Lời chúc sinh nhật</h2>
           <div class="input-group">
-            <label for="valentine-message">Lời chúc Birthday</label>
-            <textarea id="valentine-message" placeholder="Viết lời chúc sinh nhật từ trái tim của bạn..."></textarea>
+            <label for="valentine-message">Lời chúc</label>
+            <textarea id="valentine-message" placeholder="Viết lời chúc sinh nhật của bạn..."></textarea>
           </div>
           
           <div class="gemini-btn-group">
@@ -1189,14 +1289,17 @@
     
     <!-- Floating Bubbles -->
     <div class="bubbles-container" id="bubblesContainer">
-      <div class="bubble"></div>
-      <div class="bubble"></div>
-      <div class="bubble"></div>
-      <div class="bubble"></div>
-      <div class="bubble"></div>
-      <div class="bubble"></div>
-      <div class="bubble"></div>
-      <div class="bubble"></div>
+      <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+      <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+      <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+      <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+      <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+      <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+      <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+      <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+      <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+      <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+      <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
     </div>
     
     <audio id="background-music" loop preload="auto" style="display: none;"></audio>
@@ -1210,7 +1313,6 @@
 
     <!-- Candle Scene -->
     <div id="candleSection" class="hidden">
-      <p class="instruction">Hãy thổi nến sau 3s</p>
       <div class="candle-holder">
           <div class="wick"></div>
           <div class="new-flame-container" id="new-flame">
@@ -1221,6 +1323,7 @@
           <div class="smoke" id="smoke-puff"></div>
           <div class="candle-body"></div>
       </div>
+      <p class="instruction" id="candle-instruction">Hãy thổi nến nào!</p>
       <div class="countdown" id="countdown">3</div>
     </div>
 
@@ -1228,6 +1331,7 @@
 
     <!-- Cake Scene -->
     <div id="cakeSection" class="hidden">
+        <img src="hinhanh/trangtri.png" alt="Trang trí" class="top-decoration" id="topDecoration" onerror="this.style.display='none'">
         <div class="cake-container">
             <div id="display-recipient" class="recipient-name-display"></div>
             <div class="cake-content">
@@ -1235,10 +1339,12 @@
                     <img src="hinhanh/hpbd.png" alt="Happy Birthday" class="hpbd-image">
                     <img src="hinhanh/banhkem.png" alt="Bánh kem" class="cake">
                     <div id="letterContainerStatic">
-                        <div class="envelope">
-                            <div class="envelope-lid"></div>
-                            <div class="envelope-base"></div>
-                            <div class="heart-seal"></div>
+                        <div class="letter-tilt">
+                          <div class="envelope">
+                              <div class="envelope-lid"></div>
+                              <div class="envelope-base"></div>
+                              <div class="heart-seal"></div>
+                          </div>
                         </div>
                     </div>
                 </div>
@@ -1266,7 +1372,7 @@
           <button id="modal-close-btn" class="modal-close-btn">&times;</button>
           <div class="message-box-inner">
             <img id="letter-content-image" class="letter-content-image" alt="Ảnh trang trí" onerror="this.style.display='none'">
-            <p class="letter-content-title">💌 Lời chúc từ người đặc biệt 💌</p>
+            <p class="letter-content-title"></p>
             <div id="letter-content-message" class="letter-content-message"></div>
           </div>
       </div>
@@ -1348,6 +1454,8 @@
       if (valentineDataParam) {
         mainContainer.classList.add('hidden');
         birthdayEffectOverlay.style.display = 'flex';
+        const siteFooter = document.querySelector('footer');
+        if (siteFooter) siteFooter.style.display = 'none';
         showBirthdayFlow(valentineDataParam);
       }
       
@@ -1507,7 +1615,10 @@
               const img = document.createElement('img');
               img.src = imgSrc;
               img.alt = `Ảnh ${index + 1}`;
-              img.classList.add('visible');
+              const [sx, sy] = getRandomOffscreenVector();
+              img.style.setProperty('--sx', sx);
+              img.style.setProperty('--sy', sy);
+              img.classList.add('visible', 'fly-in');
 
               // Make first 3 images static and spread out diagonally
               if (index < 3) {
@@ -1546,16 +1657,23 @@
 
       function startCandleCountdown(name) {
         candleSection.classList.remove('hidden');
-        let countdown = 3;
-        countdownElement.textContent = countdown;
-        const countdownInterval = setInterval(() => {
-          countdown--;
+        const instructionEl = document.getElementById('candle-instruction');
+        instructionEl.style.display = 'block';
+        countdownElement.style.display = 'none';
+        setTimeout(() => {
+          instructionEl.style.display = 'none';
+          countdownElement.style.display = 'block';
+          let countdown = 3;
           countdownElement.textContent = countdown;
-          if (countdown === 0) {
-            clearInterval(countdownInterval);
-            blowCandle(name);
-          }
-        }, 1000);
+          const countdownInterval = setInterval(() => {
+            countdown--;
+            countdownElement.textContent = countdown;
+            if (countdown === 0) {
+              clearInterval(countdownInterval);
+              blowCandle(name);
+            }
+          }, 1000);
+        }, 2000);
       }
       
       function blowCandle(name) {
@@ -1573,6 +1691,7 @@
         setTimeout(() => {
           candleSection.classList.add('hidden');
           cakeSection.classList.remove('hidden');
+          addOutroEffects();
         }, 2000);
       }
       
@@ -1637,6 +1756,7 @@
         letterContentMessage.innerHTML = `
           <div class='greeting'>${greeting},</div>
           <div class='recipient-name'>${recipientName}</div>
+          <div class="right-shape"></div>
           <div class='message-content'>${message.replace(/\n/g, '<br>')}</div>
         `;
 
@@ -1645,6 +1765,11 @@
         messageBox.style.display = 'none'; // Hide message box initially
         
         setTimeout(() => {
+            const [sx, sy] = getRandomOffscreenVector();
+            envelopeContainer.style.setProperty('--sx', sx);
+            envelopeContainer.style.setProperty('--sy', sy);
+            // keep envelope rotation stable (letter tilt is independent)
+            envelopeContainer.classList.add('fly-in');
             envelopeContainer.classList.add('letter-open');
             
             setTimeout(() => {
@@ -1668,22 +1793,22 @@
       // --- NEW: Bubbles Animation ---
       function createBubbles() {
         const bubbles = bubblesContainer.querySelectorAll('.bubble');
-        bubbles.forEach((bubble, index) => {
-          const size = 20 + Math.random() * 40;
+        bubbles.forEach((bubble) => {
+          const size = 18 + Math.random() * 50;
           const left = Math.random() * 100;
-          const animationDuration = 8 + Math.random() * 4;
+          const animationDuration = 6 + Math.random() * 6;
           
           bubble.style.width = size + 'px';
           bubble.style.height = size + 'px';
           bubble.style.left = left + '%';
           bubble.style.animationDuration = animationDuration + 's';
-          bubble.style.animationDelay = Math.random() * 8 + 's';
+          bubble.style.animationDelay = Math.random() * 10 + 's';
         });
       }
       
       function startBubbles() {
         createBubbles();
-        setInterval(createBubbles, 8000);
+        setInterval(createBubbles, 6000);
       }
       
       // --- ENHANCED: Fireworks Effects ---
@@ -1778,9 +1903,13 @@
       }
       
       function addOutroEffects() {
-        // Add scale-in effect to cake section
-        const cakeElements = cakeSection.querySelectorAll('.cake, .hpbd-image, #letterContainerStatic');
+        // Add scale-in effect to cake section + fly-in from off-screen
+        const cakeElements = cakeSection.querySelectorAll('.cake, .hpbd-image, #letterContainerStatic, #topDecoration');
         cakeElements.forEach((el, index) => {
+          const [sx, sy] = getRandomOffscreenVector();
+          el.style.setProperty('--sx', sx);
+          el.style.setProperty('--sy', sy);
+          el.classList.add('fly-in');
           el.style.opacity = '0';
           el.style.transform = 'scale(0.8)';
           setTimeout(() => {
@@ -1789,6 +1918,20 @@
             el.style.transform = 'scale(1)';
           }, index * 300);
         });
+      }
+
+      function getRandomOffscreenVector() {
+        const edges = ['top', 'right', 'bottom', 'left'];
+        const pick = edges[Math.floor(Math.random() * edges.length)];
+        const offsetX = (Math.random() * 40 + 80).toFixed(0); // 80-120vw
+        const offsetY = (Math.random() * 40 + 80).toFixed(0); // 80-120vh
+        switch (pick) {
+          case 'top': return [`0vw`, `-${offsetY}vh`];
+          case 'bottom': return [`0vw`, `${offsetY}vh`];
+          case 'left': return [`-${offsetX}vw`, `0vh`];
+          case 'right': return [`${offsetX}vw`, `0vh`];
+          default: return [`0vw`, `-${offsetY}vh`];
+        }
       }
       
       // Add event listeners for closing
