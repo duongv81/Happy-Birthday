@@ -255,7 +255,7 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: #111;
+      background: #98bec8;
       color: white;
       z-index: 100;
       display: none;
@@ -288,33 +288,38 @@
         to { opacity: 1; }
     }
 
-    /* === NEW CANDLE & FLAME STYLES (COMPLETE REDESIGN) === */
+    /* === MODIFIED: Candle Section Layout === */
     #candleSection {
         display: flex;
         flex-direction: column;
         align-items: center;
         perspective: 800px;
+        justify-content: flex-end;
+        height: 100%;
+        padding-bottom: 100px;
+        background-image: url('hinhanh/nen1.jpg');
+        background-size: cover;
+        background-position: center;
     }
     .candle-holder {
         position: relative;
         width: 80px;
         display: flex;
         justify-content: center;
-        margin-top: 50px;
     }
     .candle-body {
-        width: 60px;
-        height: 200px;
+        width: 50px;
+        height: 150px;
         background: repeating-linear-gradient(
             45deg,
             #ff7b7b,
-            #ff7b7b 10px,
-            #ffadad 10px,
-            #ffadad 20px
+            #ff7b7b 8px,
+            #ffadad 8px,
+            #ffadad 16px
         );
         border-radius: 6px 6px 0 0;
         position: relative;
-        box-shadow: inset 0 -10px 15px rgba(0,0,0,0.15), 0 5px 10px rgba(0,0,0,0.2);
+        box-shadow: inset 0 -8px 12px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.2);
     }
     .candle-body::before { /* Dripping Wax Effect */
         content: '';
@@ -353,11 +358,11 @@
     }
     .new-flame-container {
         position: absolute;
-        top: -85px;
+        top: -70px;
         left: 50%;
         transform: translateX(-50%);
-        width: 50px;
-        height: 90px;
+        width: 40px;
+        height: 70px;
         transform-style: preserve-3d;
         animation: move-flame 3s infinite ease-in-out;
     }
@@ -371,23 +376,23 @@
         box-shadow: 0 0 20px 5px #ffae42, 0 0 40px 10px #ff7800, 0 0 60px 15px rgba(255, 50, 0, 0.7);
     }
     .flame-part.base {
-        width: 30px;
-        height: 80px;
+        width: 25px;
+        height: 60px;
         background: linear-gradient(to top, #ff7800, #ffae42);
         animation: scale-flame 1.5s infinite ease-in-out;
     }
     .flame-part.blue {
-        width: 20px;
-        height: 30px;
+        width: 16px;
+        height: 24px;
         background: #8ecae6;
         animation: scale-flame 2s infinite ease-in-out;
-        box-shadow: 0 0 15px 5px #8ecae6;
+        box-shadow: 0 0 12px 4px #8ecae6;
     }
     .flame-part.glow { /* a subtle white-hot center */
-        width: 15px;
-        height: 50px;
+        width: 12px;
+        height: 40px;
         background: #fff;
-        filter: blur(5px);
+        filter: blur(4px);
         animation: scale-flame 1s infinite ease-in-out;
         box-shadow: none;
     }
@@ -403,15 +408,15 @@
     /* Smoke effect */
     .smoke {
         position: absolute;
-        top: -90px;
+        top: -75px;
         left: 50%;
         transform: translateX(-50%);
-        width: 8px;
-        height: 8px;
+        width: 6px;
+        height: 6px;
         background: #aaa;
         border-radius: 50%;
         opacity: 0;
-        filter: blur(4px);
+        filter: blur(3px);
         z-index: 10;
     }
     .smoke.puff {
@@ -421,7 +426,6 @@
       0% { transform: translateX(-50%) translateY(0) scale(1); opacity: 0.8; }
       100% { transform: translateX(-60%) translateY(-80px) scale(4); opacity: 0; }
     }
-    /* === END NEW CANDLE STYLES === */
     
     .countdown {
       font-size: 2rem;
@@ -436,7 +440,7 @@
       font-size: 2.5rem;
       color: #ffd700;
       text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-      margin-bottom: 20px;
+      margin-bottom: 50px; 
       text-align: center;
     }
 
@@ -448,29 +452,79 @@
       z-index: 5;
     }
     
-    /* Confetti Styles */
-    .confetti-container {
-      position: absolute;
+    /* === ENHANCED: Floating Bubbles Effect === */
+    .bubbles-container {
+      position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
       pointer-events: none;
+      z-index: 1;
       overflow: hidden;
     }
-    .confetti-dot {
+    
+    .bubble {
       position: absolute;
       border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      border: 3px solid rgba(255, 255, 255, 0.6);
+      animation: float-up 8s infinite linear;
       opacity: 0;
-      animation: dot-fall linear forwards;
-      z-index: 10;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
     }
-    @keyframes dot-fall {
-        0% { transform: translateY(-10vh); opacity: 0; }
-        10% { opacity: 0.8; }
-        90% { opacity: 0.8; }
-        100% { transform: translateY(100vh); opacity: 0; }
+    
+    .bubble:nth-child(odd) {
+      background: rgba(255, 182, 193, 0.4);
+      border-color: rgba(255, 182, 193, 0.7);
+      box-shadow: 0 0 25px rgba(255, 182, 193, 0.5);
     }
+    
+    .bubble:nth-child(3n) {
+      background: rgba(255, 215, 0, 0.3);
+      border-color: rgba(255, 215, 0, 0.6);
+      box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+    }
+    
+    .bubble:nth-child(4n) {
+      background: rgba(255, 105, 180, 0.4);
+      border-color: rgba(255, 105, 180, 0.7);
+      box-shadow: 0 0 25px rgba(255, 105, 180, 0.5);
+    }
+    
+    .bubble:nth-child(5n) {
+      background: rgba(138, 43, 226, 0.3);
+      border-color: rgba(138, 43, 226, 0.6);
+      box-shadow: 0 0 30px rgba(138, 43, 226, 0.6);
+    }
+    
+    @keyframes float-up {
+      0% {
+        transform: translateY(100vh) scale(0);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.8;
+      }
+      90% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-100px) scale(1);
+        opacity: 0;
+      }
+    }
+    
+    .bubble:nth-child(1) { animation-delay: 0s; }
+    .bubble:nth-child(2) { animation-delay: 1s; }
+    .bubble:nth-child(3) { animation-delay: 2s; }
+    .bubble:nth-child(4) { animation-delay: 3s; }
+    .bubble:nth-child(5) { animation-delay: 4s; }
+    .bubble:nth-child(6) { animation-delay: 5s; }
+    .bubble:nth-child(7) { animation-delay: 6s; }
+    .bubble:nth-child(8) { animation-delay: 7s; }
+
+    /* === REMOVED: Fireworks Section === */
 
     /* Cake & Photo Section */
     #cakeSection {
@@ -480,7 +534,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+      background-image: url('hinhanh/nen1.jpg');
       background-size: cover;
       background-position: center;
       z-index: 30;
@@ -510,6 +564,16 @@
       height: auto;
       filter: drop-shadow(0 20px 40px rgba(0,0,0,0.35));
       z-index: 3;
+    }
+    
+    /* === NEW: Style for HPBD image === */
+    .hpbd-image {
+      width: 90%;
+      max-width: 400px;
+      position: relative;
+      z-index: 4;
+      margin-bottom: -15%; /* Adjust overlap with cake */
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2));
     }
 
     /* Photo Gallery Styles */
@@ -559,10 +623,10 @@
     }
 
 
-    /* Letter Styles */
+    /* === NEW: Letter from letter.html positioned next to cake === */
     #letterContainerStatic {
       position: absolute;
-      bottom: 15%;
+      bottom: 25%;
       left: 5%; 
       transform: rotate(-15deg); 
       cursor: pointer;
@@ -571,16 +635,21 @@
       z-index: 35; 
       transition: transform 0.3s ease;
     }
+    
     #letterContainerStatic:hover {
         transform: rotate(-15deg) scale(1.05);
     }
-    .letter-envelope {
+    
+    /* Envelope container */
+    #letterContainerStatic .envelope {
       width: 100%;
       height: 100%;
       position: relative;
       perspective: 600px;
     }
-    .letter-lid {
+    
+    /* Envelope lid - triangular */
+    #letterContainerStatic .envelope-lid {
       position: absolute;
       top: 0;
       left: 0;
@@ -595,7 +664,9 @@
       z-index: 3;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-    .letter-base {
+    
+    /* Envelope base */
+    #letterContainerStatic .envelope-base {
       position: absolute;
       bottom: 0;
       width: 100%;
@@ -605,126 +676,295 @@
       z-index: 1;
       box-shadow: inset 0 3px 5px rgba(255,255,255,0.6);
     }
-    .letter-heart {
+    
+    /* Heart seal */
+    #letterContainerStatic .heart-seal {
       position: absolute;
-      top: 36px;
+      top: 27px;
       left: 50%;
       transform: translateX(-50%);
-      width: 18px;
-      height: 18px;
+      width: 24px;
+      height: 24px;
       background: red;
-      clip-path: polygon(50% 0%, 61% 10%, 70% 20%, 75% 35%, 70% 50%, 30% 50%, 25% 35%, 30% 20%, 39% 10%);
+      clip-path: polygon(
+        50% 0%, 61% 10%, 70% 20%, 75% 35%,
+        70% 50%, 50% 70%, 30% 50%, 25% 35%,
+        30% 20%, 39% 10%
+      );
       z-index: 4;
-      box-shadow: 0 0 8px rgba(0,0,0,0.3);
+      box-shadow: 0 0 6px rgba(0,0,0,0.3);
       animation: pulse 2s infinite;
     }
-    @keyframes pulse {
-      0% { transform: translateX(-50%) scale(1); }
-      50% { transform: translateX(-50%) scale(1.1); }
-      100% { transform: translateX(-50%) scale(1); }
-    }
-
-    /* Letter Modal Styles */
+    
+    /* === NEW/MODIFIED: Letter Modal V8 - With Envelope Animation === */
     .letter-modal-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0,0,0,0.7);
-      backdrop-filter: blur(6px);
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
       display: flex;
       justify-content: center;
       align-items: center;
       z-index: 2000;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.5s ease;
+      transition: opacity 0.8s ease;
+      overflow: hidden;
     }
     .letter-modal-overlay.active {
       opacity: 1;
       pointer-events: auto;
     }
-    .letter-modal-container {
-        width: 320px;
-        height: 280px;
-        position: relative;
-        cursor: pointer;
-        perspective: 600px;
+    
+    /* Envelope container */
+    .envelope-container {
+      width: 320px;
+      height: 280px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2;
+      perspective: 600px;
+      opacity: 1;
+      transition: opacity 0.5s ease 0.8s, transform 0.5s ease 0.8s;
     }
-    #letter-modal-envelope {
+    
+    .letter-modal-overlay.show-message .envelope-container {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.8);
+      pointer-events: none;
+    }
+    
+    /* Envelope */
+    .envelope {
       width: 100%;
       height: 100%;
       position: relative;
     }
-    #letter-modal-envelope .letter-lid {
-        border-left: 160px solid transparent;
-        border-right: 160px solid transparent;
-        border-bottom: 90px solid #ff9eb0;
-    }
-    #letter-modal-envelope .letter-base {
-        height: 190px;
-    }
-    #letter-modal-envelope .letter-heart {
-        top: 72px;
-        width: 36px;
-        height: 36px;
-    }
-    #letter-modal-content {
+    
+    /* Envelope lid - triangular */
+    .envelope-lid {
       position: absolute;
-      bottom: 10px;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 160px solid transparent;
+      border-right: 160px solid transparent;
+      border-bottom: 90px solid #ff9eb0;
+      transform-origin: bottom center;
+      transform: rotateX(180deg);
+      transition: transform 1s ease;
+      z-index: 3;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .envelope-container.letter-open .envelope-lid {
+      transform: rotateX(0deg);
+    }
+    
+    /* Envelope base */
+    .envelope-base {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 190px;
+      background: #ffc1cc;
+      border-radius: 0 0 10px 10px;
+      z-index: 1;
+      box-shadow: inset 0 3px 5px rgba(255,255,255,0.6);
+    }
+    
+    /* Heart seal */
+    .heart-seal {
+      position: absolute;
+      top: 72px;
       left: 50%;
-      transform: translateX(-50%) translateY(0);
+      transform: translateX(-50%);
+      width: 36px;
+      height: 36px;
+      background: red;
+      clip-path: polygon(
+        50% 0%, 61% 10%, 70% 20%, 75% 35%,
+        70% 50%, 50% 70%, 30% 50%, 25% 35%,
+        30% 20%, 39% 10%
+      );
+      z-index: 4;
+      box-shadow: 0 0 8px rgba(0,0,0,0.3);
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { transform: translateX(-50%) scale(1); }
+      50% { transform: translateX(-50%) scale(1.1); }
+      100% { transform: translateX(-50%) scale(1); }
+    }
+    
+    /* Flying letter */
+    .flying-letter {
+      position: absolute;
+      bottom: 5px;
+      left: 50%;
       width: 90%;
-      max-width: 350px;
-      height: 280px;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-      padding: 25px 30px;
-      opacity: 0;
-      transition: transform 1s ease, opacity 1s ease;
-      z-index: 5;
-      font-family: 'Dancing Script', cursive;
-      font-size: 20px;
-      text-align: center;
-      line-height: 1.6;
-      overflow-wrap: break-word;
-      word-break: break-word;
-      box-sizing: border-box;
-      color: #333;
-    }
-    #letter-modal-content.show {
-      transform: translate(-50%, -240px);
+      height: 90%;
+      background: #fff;
+      border-radius: 5px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      transform: translateX(-50%) translateY(0);
       opacity: 1;
+      z-index: 2;
+      transition: all 1.2s cubic-bezier(0.25, 1, 0.5, 1) 0.2s;
     }
-    .letter-open .letter-lid {
-      transform: rotateX(0deg) !important;
-    }
-    .modal-close-btn {
-        position: absolute;
-        top: -30px;
-        right: -30px;
-        font-size: 30px;
-        color: white;
-        cursor: pointer;
-        background: none;
-        border: none;
-        z-index: 10;
-        opacity: 0.8;
-    }
-    .modal-close-btn:hover {
-        opacity: 1;
+    
+    .envelope-container.letter-open .flying-letter {
+        transform: translate(150px, -400px) rotate(30deg);
+        opacity: 0;
     }
 
+    #message-box {
+      position: relative;
+      width: 90vw;
+      max-width: 500px;
+      background: rgba(255, 255, 255, 0.98);
+      color: #333;
+      border-radius: 20px;
+      border: 3px solid #ffe4e9;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      text-align: center;
+      opacity: 0;
+      transform: scale(0.9);
+      transition: opacity 0.5s ease 0.5s, transform 0.5s ease 0.5s;
+      z-index: 20;
+      display: none;
+      flex-direction: column;
+      padding: 30px;
+    }
+    #message-box.show {
+      display: flex;
+      opacity: 1;
+      transform: scale(1);
+    }
+    #message-box .modal-close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 30px;
+      color: #aaa;
+      cursor: pointer;
+      background: none;
+      border: none;
+      line-height: 1;
+    }
+    .message-box-inner {
+        overflow-y: auto;
+        max-height: 70vh;
+        padding: 10px;
+    }
+     .message-box-inner::-webkit-scrollbar { width: 5px; }
+    .message-box-inner::-webkit-scrollbar-track { background: #f1f1f1; }
+    .message-box-inner::-webkit-scrollbar-thumb { background: #ffc1cc; border-radius: 5px; }
+
+
+    #message-box {
+      position: relative;
+      width: 90vw;
+      max-width: 500px;
+      background: rgba(255, 255, 255, 0.98);
+      color: #333;
+      border-radius: 20px;
+      border: 3px solid #ffe4e9;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      text-align: center;
+      opacity: 0;
+      transform: scale(0.9);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      z-index: 20;
+      display: none;
+      flex-direction: column;
+      padding: 30px;
+    }
+    #message-box.show {
+      display: flex;
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .message-box-inner {
+        overflow-y: auto;
+        max-height: 70vh;
+        padding: 10px;
+        position: relative;
+    }
+    
     .letter-content-image {
-        max-width: 100px;
+        position: absolute;
+        top: 20px;
+        right: -30px;
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 15px;
+        transform: rotate(15deg);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        border: 4px solid #fff;
+        z-index: 10;
+    }
+    
+    .letter-content-title {
+        font-family: 'Dancing Script', cursive;
+        font-weight: bold;
+        font-size: 2.2rem;
+        color: #ff4d6d;
+        margin-bottom: 20px;
+        margin-right: 100px;
+    }
+    
+    .letter-content-message {
+        font-family: 'Dancing Script', cursive;
+        font-size: 1.6rem;
+        line-height: 1.8;
+        text-align: left;
+        margin-right: 100px;
+        color: #333;
+    }
+    
+    .letter-content-message .greeting {
+        font-weight: bold;
+        color: #ff4d6d;
+        margin-bottom: 10px;
+    }
+    
+    .letter-content-message .recipient-name {
+        font-weight: bold;
+        color: #ff4d6d;
+        display: block;
+        margin-bottom: 15px;
+    }
+    
+    .letter-content-image {
+        max-width: 120px;
         height: auto;
         border-radius: 10px;
         margin: 0 auto 15px;
         display: block;
         box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
+    .letter-content-title {
+        font-weight: bold;
+        font-size: 1.8rem;
+        color: #ff4d6d;
+        margin-bottom: 20px;
+    }
+    .letter-content-message {
+        font-size: 1.5rem;
+        line-height: 1.7;
+        text-align: center;
+    }
+    
     .recipient-name-display {
         font-family: 'Dancing Script', cursive;
         font-size: 3.5rem;
@@ -732,6 +972,48 @@
         color: white;
         text-shadow: 0 2px 10px rgba(0,0,0,0.3);
         margin-bottom: 20px;
+    }
+    
+    /* === NEW: Enhanced Intro/Outro Effects === */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes scaleIn {
+      from {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    
+    .fade-in-up {
+      animation: fadeInUp 0.8s ease-out;
+    }
+    
+    .fade-in-down {
+      animation: fadeInDown 0.8s ease-out;
     }
     
     /* Responsive adjustments */
@@ -751,6 +1033,67 @@
         }
         #startScreen h2 {
             font-size: 3rem;
+        }
+        #message-box {
+          padding: 30px 20px;
+        }
+        .envelope {
+          width: 280px;
+          height: 240px;
+        }
+        .envelope-lid {
+          border-left: 140px solid transparent;
+          border-right: 140px solid transparent;
+          border-bottom: 75px solid #ff9eb0;
+        }
+        .envelope-base {
+          height: 165px;
+        }
+        .heart-seal {
+          top: 60px;
+        }
+        .letter {
+          max-width: 300px;
+          height: 240px;
+          padding: 20px 25px;
+          font-size: 18px;
+        }
+        .letter.show {
+          transform: translate(-50%, -200px);
+        }
+        .envelope-container {
+          width: 280px;
+          height: 240px;
+        }
+        .envelope-lid {
+          border-left: 140px solid transparent;
+          border-right: 140px solid transparent;
+          border-bottom: 75px solid #ff9eb0;
+        }
+        .envelope-base {
+          height: 165px;
+        }
+        .heart-seal {
+          top: 60px;
+        }
+        #message-box {
+          padding: 20px 15px;
+          max-width: 90vw;
+        }
+        .letter-content-image {
+          width: 80px;
+          height: 80px;
+          top: 15px;
+          right: -20px;
+          transform: rotate(10deg);
+        }
+        .letter-content-title {
+          font-size: 1.8rem;
+          margin-right: 60px;
+        }
+        .letter-content-message {
+          font-size: 1.4rem;
+          margin-right: 60px;
         }
     }
   </style>
@@ -844,6 +1187,18 @@
   <!-- Birthday Effect Scenes -->
   <div id="birthday-effect-overlay" class="birthday-scene-overlay">
     
+    <!-- Floating Bubbles -->
+    <div class="bubbles-container" id="bubblesContainer">
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+    </div>
+    
     <audio id="background-music" loop preload="auto" style="display: none;"></audio>
     
     <!-- Start Screen -->
@@ -869,24 +1224,21 @@
       <div class="countdown" id="countdown">3</div>
     </div>
 
-    <!-- Fireworks Scene -->
-    <div id="birthdaySection" class="hidden">
-      <div class="confetti-container" id="confettiContainer"></div>
-      <canvas id="birthdayCanvas"></canvas>
-    </div>
+    <!-- Fireworks Scene - REMOVED -->
 
     <!-- Cake Scene -->
     <div id="cakeSection" class="hidden">
         <div class="cake-container">
             <div id="display-recipient" class="recipient-name-display"></div>
             <div class="cake-content">
-                <div class="relative flex justify-center items-center">
-                    <img src="https://res.cloudinary.com/dwyql42uf/image/upload/v1728841022/banhkem_o3zb6i.png" alt="Bánh kem" class="cake">
-                    <div id="letterContainerStatic" class="relative">
-                        <div class="letter-envelope" id="letterEnvelopeStatic">
-                            <div class="letter-lid"></div>
-                            <div class="letter-base"></div>
-                            <div class="letter-heart"></div>
+                <div class="relative flex flex-col justify-center items-center">
+                    <img src="hinhanh/hpbd.png" alt="Happy Birthday" class="hpbd-image">
+                    <img src="hinhanh/banhkem.png" alt="Bánh kem" class="cake">
+                    <div id="letterContainerStatic">
+                        <div class="envelope">
+                            <div class="envelope-lid"></div>
+                            <div class="envelope-base"></div>
+                            <div class="heart-seal"></div>
                         </div>
                     </div>
                 </div>
@@ -897,27 +1249,35 @@
     </div>
   </div>
   
-  <!-- Letter Modal -->
+  <!-- === NEW/MODIFIED: Letter Modal V8 - With Envelope Animation === -->
   <div id="letter-modal" class="letter-modal-overlay">
-    <div class="letter-modal-container">
-        <button class="modal-close-btn" id="modal-close-btn">&times;</button>
-        <div class="letter-envelope" id="letter-modal-envelope">
-            <div class="letter-lid"></div>
-            <div class="letter-base"></div>
-            <div class="letter-heart"></div>
-        </div>
-        <div id="letter-modal-content">
+      <!-- Envelope animation -->
+      <div class="envelope-container" id="envelope-container">
+          <div class="envelope">
+              <div class="envelope-lid"></div>
+              <div class="envelope-base"></div>
+              <div class="heart-seal"></div>
+              <div class="flying-letter"></div>
+          </div>
+      </div>
+      
+      <!-- The message box -->
+      <div id="message-box">
+          <button id="modal-close-btn" class="modal-close-btn">&times;</button>
+          <div class="message-box-inner">
             <img id="letter-content-image" class="letter-content-image" alt="Ảnh trang trí" onerror="this.style.display='none'">
-            <p class="text-center font-bold text-lg text-pink-600 mb-4">💌 Lời chúc từ người đặc biệt 💌</p>
-            <div class="letter-content-message" id="letter-content-message"></div>
-        </div>
-    </div>
+            <p class="letter-content-title">💌 Lời chúc từ người đặc biệt 💌</p>
+            <div id="letter-content-message" class="letter-content-message"></div>
+          </div>
+      </div>
   </div>
+
   
   <footer>
     <p>Made with ❤️ | Duing | Chia sẻ tình yêu của bạn đến mọi người</p>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       // --- ELEMENT SELECTORS ---
@@ -962,13 +1322,15 @@
       const photoGallery = document.getElementById('photoGallery'); 
       const confettiContainer = document.getElementById('confettiContainer');
 
-      // Modal Letter Elements
+      // === NEW: Modal Letter Elements ===
       const letterModal = document.getElementById('letter-modal');
+      const messageBox = document.getElementById('message-box');
+      const envelopeContainer = document.getElementById('envelope-container');
       const modalCloseBtn = document.getElementById('modal-close-btn');
-      const letterModalEnvelope = document.getElementById('letter-modal-envelope');
-      const letterModalContent = document.getElementById('letter-modal-content');
-      const letterContentMessage = document.getElementById('letter-content-message');
       const letterContentImage = document.getElementById('letter-content-image');
+      const letterContentMessage = document.getElementById('letter-content-message');
+      const bubblesContainer = document.getElementById('bubblesContainer');
+
       
       // --- DATA AND STATE ---
       let uploadedCloudinaryImages = [];
@@ -1135,14 +1497,11 @@
           currentValentineData = JSON.parse(decodeURIComponent(atob(encodedData)));
           
           displayRecipient.textContent = `Happy Birthday, ${currentValentineData.recipientName}!`;
-          letterContentMessage.innerHTML = currentValentineData.message.replace(/\n/g, '<br>');
           startScreenTitle.textContent = `Gửi tặng ${currentValentineData.recipientName}`;
           
-          if (currentValentineData.images.length > 0) letterContentImage.src = currentValentineData.images[0];
-          else letterContentImage.style.display = 'none'; 
-
           if (currentValentineData.musicUrl) backgroundMusic.src = currentValentineData.musicUrl;
 
+          // === MODIFIED: Photo gallery logic ===
           photoGallery.innerHTML = '';
           currentValentineData.images.forEach((imgSrc, index) => {
               const img = document.createElement('img');
@@ -1150,15 +1509,17 @@
               img.alt = `Ảnh ${index + 1}`;
               img.classList.add('visible');
 
-              if (index < 2) {
+              // Make first 3 images static and spread out diagonally
+              if (index < 3) {
                   img.classList.add('static-image');
-                  const staticRotation = (index === 0 ? -1 : 1) * (5 + index * 3);
-                  img.style.setProperty('--r', `${staticRotation}deg`);
-                  img.style.zIndex = 4 + index; 
-              } else {
+                  const rotations = [-10, 5, 12]; // Angles for img 1, 2, 3
+                  const zIndexes = [2, 3, 2];     // Stack them with the middle one on top
+                  img.style.setProperty('--r', `${rotations[index]}deg`);
+                  img.style.zIndex = zIndexes[index];
+              } else { // The rest of the images are a sliding gallery
                   img.classList.add('dynamic-image');
-                  const delay = -((index - 2) * 0.2);
-                  const rotation = (index % 2 === 0 ? -1 : 1) * (5 + index * 3);
+                  const delay = -((index - 3) * 0.2); // Adjust delay for the new starting index
+                  const rotation = (index % 2 === 0 ? -1 : 1) * (5 + Math.random() * 5); // Add some randomness
                   img.style.setProperty('--r', `${rotation}deg`);
                   img.style.animationDelay = `calc(${delay} * var(--d))`;
               }
@@ -1203,92 +1564,243 @@
         if (flame) flame.style.display = 'none';
         if (smoke) smoke.classList.add('puff');
         
+        // Start confetti effect
+        setTimeout(() => {
+          startConfettiEffect();
+        }, 500);
+        
+        // Go directly to cake section after confetti
         setTimeout(() => {
           candleSection.classList.add('hidden');
-          birthdaySection.classList.remove('hidden');
-          startConfetti();
-          startBirthdayEffect(name);
-        }, 1000);
+          cakeSection.classList.remove('hidden');
+        }, 2000);
       }
       
-      function createConfetti() {
-        const dot = document.createElement('div');
-        dot.classList.add('confetti-dot');
-        dot.style.width = `${3 + Math.random() * 5}px`;
-        dot.style.height = dot.style.width;
-        dot.style.backgroundColor = DOT_COLORS[Math.floor(Math.random() * DOT_COLORS.length)];
-        dot.style.left = `${Math.random() * 100}vw`;
-        const duration = 5 + Math.random() * 5;
-        dot.style.animationDuration = `${duration}s`;
-        dot.style.animationDelay = `${-Math.random() * duration}s`;
-        confettiContainer.appendChild(dot);
-        dot.addEventListener('animationend', () => dot.remove());
-      }
-      
-      function startConfetti() {
-        confettiContainer.innerHTML = ''; 
-        for (let i = 0; i < 20; i++) createConfetti();
-        confettiInterval = setInterval(createConfetti, 250);
-      }
+      // Confetti effect function
+      function startConfettiEffect() {
+        var count = 200;
+        var defaults = {
+          origin: { y: 0.7 }
+        };
 
-      function stopConfetti() {
-        if (confettiInterval) clearInterval(confettiInterval);
-        confettiContainer.querySelectorAll('.confetti-dot').forEach(d => {
-            d.style.opacity = 0;
-            setTimeout(() => d.remove(), 1000); 
+        function fire(particleRatio, opts) {
+          confetti({
+            ...defaults,
+            ...opts,
+            particleCount: Math.floor(count * particleRatio)
+          });
+        }
+
+        fire(0.25, {
+          spread: 26,
+          startVelocity: 55,
+        });
+        fire(0.2, {
+          spread: 60,
+        });
+        fire(0.35, {
+          spread: 100,
+          decay: 0.91,
+          scalar: 0.8
+        });
+        fire(0.1, {
+          spread: 120,
+          startVelocity: 25,
+          decay: 0.92,
+          scalar: 1.2
+        });
+        fire(0.1, {
+          spread: 120,
+          startVelocity: 45,
         });
       }
+      
+      // --- REMOVED: Old confetti and fireworks functions ---
 
-      // --- FIREWORKS CANVAS EFFECT ---
-      function startBirthdayEffect(userName) {
-        const c = document.getElementById('birthdayCanvas');
-        const w = c.width = window.innerWidth;
-        const h = c.height = window.innerHeight;
-        const ctx = c.getContext('2d');
-        const hw = w / 2, hh = h / 2;
-        const nameUppercase = userName.toUpperCase();
-        const FONT_NAME = 'Dancing Script';
-        const opts = {
-            strings: ['HAPPY', 'BIRTHDAY', nameUppercase], charSize: 30, charSpacing: 35, lineHeight: 40, fireworkPrevPoints: 10, fireworkBaseLineWidth: 5, fireworkAddedLineWidth: 8, fireworkSpawnTime: 200, fireworkBaseReachTime: 30, fireworkAddedReachTime: 30, fireworkCircleBaseSize: 20, fireworkCircleAddedSize: 10, fireworkCircleBaseTime: 30, fireworkCircleAddedTime: 30, fireworkCircleFadeBaseTime: 10, fireworkCircleFadeAddedTime: 5, fireworkBaseShards: 2, fireworkAddedShards: 2, fireworkShardPrevPoints: 3, fireworkShardBaseVel: 4, fireworkShardAddedVel: 2, fireworkShardBaseSize: 3, fireworkShardAddedSize: 3, gravity: .1, upFlow: -.1, letterContemplatingWaitTime: 360
-        };
-        const calc = { nameCharSpacing: opts.charSpacing * 1.5, totalWidth: opts.charSpacing * Math.max(opts.strings[0].length, opts.strings[1].length, opts.strings[2].length) };
-        const Tau = Math.PI * 2;
-        const letters = [];
-        ctx.font = opts.charSize + 'px ' + FONT_NAME;
-        function Letter(char, x, y, lineIndex) {
-            this.char = char; this.x = x; this.y = y; this.lineIndex = lineIndex; this.fontSize = (lineIndex === 2) ? opts.charSize * 2.5 : opts.charSize * 1.2;
-            ctx.font = this.fontSize + 'px ' + FONT_NAME; this.dx = -ctx.measureText(char).width / 2; this.dy = +this.fontSize / 2; this.fireworkDy = this.y - hh;
-            var hue = x / calc.totalWidth * 360; this.color = `hsl(${hue},90%,65%)`; this.lightAlphaColor = `hsla(${hue},90%,light%,alp)`; this.lightColor = `hsl(${hue},90%,light%)`; this.alphaColor = `hsla(${hue},90%,65%,alp)`;
-            this.reset = function() { this.phase = 'firework'; this.tick = 0; this.spawned = false; this.spawningTime = opts.fireworkSpawnTime * Math.random() | 0; this.reachTime = opts.fireworkBaseReachTime + opts.fireworkAddedReachTime * Math.random() | 0; this.lineWidth = opts.fireworkBaseLineWidth + opts.fireworkAddedLineWidth * Math.random(); this.prevPoints = [[0, hh, 0]]; }; this.reset();
-            this.step = function() { if (this.phase === 'firework') { if (!this.spawned) { if (++this.tick >= this.spawningTime) { this.tick = 0; this.spawned = true; } } else { ++this.tick; let linProp = this.tick / this.reachTime, armProp = Math.sin(linProp * (Tau / 4)), x = linProp * this.x, y = hh + armProp * this.fireworkDy; if (this.prevPoints.length > opts.fireworkPrevPoints) this.prevPoints.shift(); this.prevPoints.push([x, y, linProp * this.lineWidth]); for (let i = 1; i < this.prevPoints.length; ++i) { let p = this.prevPoints[i], p2 = this.prevPoints[i - 1]; ctx.strokeStyle = this.alphaColor.replace('alp', i / this.prevPoints.length); ctx.lineWidth = p[2] * (1 / (this.prevPoints.length - 1)) * i; ctx.beginPath(); ctx.moveTo(p[0], p[1]); ctx.lineTo(p2[0], p2[1]); ctx.stroke(); } if (this.tick >= this.reachTime) { this.phase = 'contemplate'; this.circleFinalSize = opts.fireworkCircleBaseSize + opts.fireworkCircleAddedSize * Math.random(); this.circleCompleteTime = opts.fireworkCircleBaseTime + opts.fireworkCircleAddedTime * Math.random() | 0; this.circleCreating = true; this.circleFading = false; this.circleFadeTime = opts.fireworkCircleFadeBaseTime + opts.fireworkCircleFadeAddedTime * Math.random() | 0; this.tick = 0; this.tick2 = 0; this.shards = []; let shardCount = opts.fireworkBaseShards + opts.fireworkAddedShards * Math.random() | 0, angle = Tau / shardCount, cos = Math.cos(angle), sin = Math.sin(angle), x = 1, y = 0; for (let i = 0; i < shardCount; ++i) { let x1 = x; x = x * cos - y * sin; y = y * cos + x1 * sin; this.shards.push(new Shard(this.x, this.y, x, y, this.alphaColor)); } } } } else if (this.phase === 'contemplate') { ++this.tick; if (this.circleCreating) { ++this.tick2; let p = this.tick2 / this.circleCompleteTime, a = -Math.cos(p * Math.PI) / 2 + .5; ctx.fillStyle = this.lightAlphaColor.replace('light', 50 + 50 * p).replace('alp', p); ctx.beginPath(); ctx.arc(this.x, this.y, a * this.circleFinalSize, 0, Tau); ctx.fill(); if (this.tick2 > this.circleCompleteTime) { this.tick2 = 0; this.circleCreating = false; this.circleFading = true; } } else if (this.circleFading) { ctx.font = this.fontSize + 'px ' + FONT_NAME; ctx.fillStyle = this.lightColor.replace('light', 70); ctx.fillText(this.char, this.x + this.dx, this.y + this.dy); ++this.tick2; let p = this.tick2 / this.circleFadeTime, a = -Math.cos(p * Math.PI) / 2 + .5; ctx.fillStyle = this.lightAlphaColor.replace('light', 100).replace('alp', 1 - a); ctx.beginPath(); ctx.arc(this.x, this.y, this.circleFinalSize, 0, Tau); ctx.fill(); if (this.tick2 >= this.circleFadeTime) this.circleFading = false; } else { ctx.font = this.fontSize + 'px ' + FONT_NAME; ctx.fillStyle = this.lightColor.replace('light', 70); ctx.fillText(this.char, this.x + this.dx, this.y + this.dy); } for (let i = 0; i < this.shards.length; ++i) { this.shards[i].step(); if (!this.shards[i].alive) { this.shards.splice(i, 1); --i; } } if (this.tick > opts.letterContemplatingWaitTime) { this.phase = 'done'; } } };
-        }
-        function Shard(x, y, vx, vy, color) { let vel = opts.fireworkShardBaseVel + opts.fireworkShardAddedVel * Math.random(); this.vx = vx * vel; this.vy = vy * vel; this.x = x; this.y = y; this.prevPoints = [[x, y]]; this.color = color; this.alive = true; this.size = opts.fireworkShardBaseSize + opts.fireworkShardAddedSize * Math.random(); this.step = function() { this.x += this.vx; this.y += this.vy += opts.gravity; if (this.prevPoints.length > opts.fireworkShardPrevPoints) this.prevPoints.shift(); this.prevPoints.push([this.x, this.y]); for (let k = 0; k < this.prevPoints.length - 1; ++k) { let p = this.prevPoints[k], p2 = this.prevPoints[k + 1]; ctx.strokeStyle = this.color.replace('alp', k / this.prevPoints.length); ctx.lineWidth = k * (this.size / this.prevPoints.length); ctx.beginPath(); ctx.moveTo(p[0], p[1]); ctx.lineTo(p2[0], p2[1]); ctx.stroke(); } if (this.prevPoints[0][1] > hh) this.alive = false; }; }
-        for (let i = 0; i < opts.strings.length; ++i) { let len = opts.strings[i].length, isName = (i === 2), spacing = isName ? calc.nameCharSpacing : opts.charSpacing, startX = -(len * spacing) / 2 + spacing / 2, customY = (i === 0) ? -60 : (i === 1) ? -15 : 65; for (let j = 0; j < len; ++j) letters.push(new Letter(opts.strings[i][j], startX + j * spacing, customY, i)); }
-        let animLoop = function() { window.requestAnimationFrame(animLoop); ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'; ctx.fillRect(0, 0, w, h); ctx.translate(hw, hh); let done = true; for (let l = 0; l < letters.length; ++l) { letters[l].step(); if (letters[l].phase !== 'done') done = false; } ctx.translate(-hw, -hh); if (done) { setTimeout(() => { birthdaySection.classList.add('hidden'); stopConfetti(); cakeSection.classList.remove('hidden');}, 1000); return; } }; animLoop();
-        window.addEventListener('resize', () => { c.width = w = window.innerWidth; c.height = h = window.innerHeight; hw = w / 2; hh = h / 2; ctx.font = opts.charSize + 'px ' + FONT_NAME; });
-      }
+      // --- REMOVED: Fireworks Canvas Effect ---
 
-      // --- LETTER MODAL LOGIC ---
+      // --- NEW LETTER MODAL LOGIC ---
       letterContainerStatic.addEventListener('click', function() {
+        // Populate content
+        letterContentImage.src = currentValentineData.images.length > 0 ? currentValentineData.images[0] : '';
+        if (!letterContentImage.src) {
+            letterContentImage.style.display = 'none';
+        } else {
+            letterContentImage.style.display = 'block';
+        }
+        
+        // Format message with Dear + name + message
+        const greeting = 'Dear';
+        const recipientName = currentValentineData.recipientName;
+        const message = currentValentineData.message;
+        
+        letterContentMessage.innerHTML = `
+          <div class='greeting'>${greeting},</div>
+          <div class='recipient-name'>${recipientName}</div>
+          <div class='message-content'>${message.replace(/\n/g, '<br>')}</div>
+        `;
+
+        // Show modal and start envelope animation
         letterModal.classList.add('active');
+        messageBox.style.display = 'none'; // Hide message box initially
+        
         setTimeout(() => {
-            letterModalEnvelope.classList.add('letter-open');
-            setTimeout(() => letterModalContent.classList.add('show'), 800);
-        }, 300);
+            envelopeContainer.classList.add('letter-open');
+            
+            setTimeout(() => {
+                letterModal.classList.add('show-message');
+                messageBox.style.display = 'flex';
+                setTimeout(() => messageBox.classList.add('show'), 10);
+            }, 1000);
+        }, 100);
       });
+
       function closeModal() {
-        letterModalContent.classList.remove('show');
+        messageBox.classList.remove('show');
+        
         setTimeout(() => {
-            letterModalEnvelope.classList.remove('letter-open');
-            setTimeout(() => letterModal.classList.remove('active'), 800);
-        }, 300);
+            letterModal.classList.remove('active');
+            letterModal.classList.remove('show-message');
+            envelopeContainer.classList.remove('letter-open');
+        }, 500);
       }
+
+      // --- NEW: Bubbles Animation ---
+      function createBubbles() {
+        const bubbles = bubblesContainer.querySelectorAll('.bubble');
+        bubbles.forEach((bubble, index) => {
+          const size = 20 + Math.random() * 40;
+          const left = Math.random() * 100;
+          const animationDuration = 8 + Math.random() * 4;
+          
+          bubble.style.width = size + 'px';
+          bubble.style.height = size + 'px';
+          bubble.style.left = left + '%';
+          bubble.style.animationDuration = animationDuration + 's';
+          bubble.style.animationDelay = Math.random() * 8 + 's';
+        });
+      }
+      
+      function startBubbles() {
+        createBubbles();
+        setInterval(createBubbles, 8000);
+      }
+      
+      // --- ENHANCED: Fireworks Effects ---
+      function createFloatingParticles() {
+        const particlesContainer = document.getElementById('floatingParticles');
+        
+        for (let i = 0; i < 20; i++) {
+          const particle = document.createElement('div');
+          particle.classList.add('particle');
+          
+          const size = 2 + Math.random() * 4;
+          const left = Math.random() * 100;
+          const animationDuration = 6 + Math.random() * 6;
+          
+          particle.style.width = size + 'px';
+          particle.style.height = size + 'px';
+          particle.style.left = left + '%';
+          particle.style.animationDuration = animationDuration + 's';
+          particle.style.animationDelay = Math.random() * 8 + 's';
+          
+          particlesContainer.appendChild(particle);
+        }
+      }
+      
+      function createSparkles() {
+        const sparklesContainer = document.getElementById('birthdaySection');
+        
+        for (let i = 0; i < 15; i++) {
+          const sparkle = document.createElement('div');
+          sparkle.classList.add('sparkle');
+          
+          const top = Math.random() * 100;
+          const left = Math.random() * 100;
+          const animationDelay = Math.random() * 2;
+          
+          sparkle.style.top = top + '%';
+          sparkle.style.left = left + '%';
+          sparkle.style.animationDelay = animationDelay + 's';
+          
+          sparklesContainer.appendChild(sparkle);
+        }
+      }
+      
+      function startFireworksEffects() {
+        createFloatingParticles();
+        createSparkles();
+        
+      // --- ENHANCED: Bubbles Animation ---
+      function createBubbles() {
+        const bubbles = bubblesContainer.querySelectorAll('.bubble');
+        bubbles.forEach((bubble, index) => {
+          const size = 30 + Math.random() * 50;
+          const left = Math.random() * 100;
+          const animationDuration = 8 + Math.random() * 4;
+          
+          bubble.style.width = size + 'px';
+          bubble.style.height = size + 'px';
+          bubble.style.left = left + '%';
+          bubble.style.animationDuration = animationDuration + 's';
+          bubble.style.animationDelay = Math.random() * 8 + 's';
+        });
+      }
+      
+      function startBubbles() {
+        createBubbles();
+        setInterval(createBubbles, 6000); // More frequent bubbles
+      }
+      
+        // Update celebration text with recipient name
+        const celebrationText = document.getElementById('celebrationText');
+        if (currentValentineData && currentValentineData.recipientName) {
+          celebrationText.textContent = `🎉 Chúc Mừng Sinh Nhật ${currentValentineData.recipientName}! 🎉`;
+        }
+      }
+      
+      // Start bubbles animation when birthday flow begins
+      startBubbles();
+      
+      // --- ENHANCED: Add intro/outro effects ---
+      function addIntroEffects() {
+        // Add fade-in effects to start screen
+        const startElements = startScreen.querySelectorAll('h2, p, button');
+        startElements.forEach((el, index) => {
+          el.style.opacity = '0';
+          el.style.transform = 'translateY(20px)';
+          setTimeout(() => {
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            el.style.opacity = '1';
+            el.style.transform = 'translateY(0)';
+          }, index * 200);
+        });
+      }
+      
+      function addOutroEffects() {
+        // Add scale-in effect to cake section
+        const cakeElements = cakeSection.querySelectorAll('.cake, .hpbd-image, #letterContainerStatic');
+        cakeElements.forEach((el, index) => {
+          el.style.opacity = '0';
+          el.style.transform = 'scale(0.8)';
+          setTimeout(() => {
+            el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            el.style.opacity = '1';
+            el.style.transform = 'scale(1)';
+          }, index * 300);
+        });
+      }
+      
+      // Add event listeners for closing
       modalCloseBtn.addEventListener('click', closeModal);
-      letterModal.addEventListener('click', e => { if (e.target === letterModal) closeModal(); });
+      letterModal.addEventListener('click', e => {
+          if (e.target === letterModal) {
+              closeModal();
+          }
+      });
       
     });
   </script>
 </body>
 </html>
-" with a query of "sửa lỗi hiển thị phần thêm ảnh, và trang chỉ hiển thị những ảnh và nhạc vừa nhập".
 
