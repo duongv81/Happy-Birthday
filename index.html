@@ -1444,7 +1444,7 @@
       let currentValentineData = null;
       let confettiInterval = null;
       const DOT_COLORS = ['#ff4d6d', '#ffc1cc', '#f9f9f9', '#ffd700', '#4CAF50', '#00bcd4', '#9c27b0'];
-      const API_KEY = "";
+      const API_KEY = "AIzaSyC1HPGh7HNzNDFTdV1kQcrRVd8Y3ytPcAw";
       const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${API_KEY}`;
 
       // Check for URL params to display birthday page
@@ -1461,7 +1461,7 @@
       
       // --- UTILITY FUNCTIONS ---
       function showLoading() { loadingOverlay.style.display = 'flex'; }
-      function hideLoading() { loadingOverlay.style.display = 'none'; }
+      function hideLoading() { loadingOverlay.style.display = 'none'; }a
 
       async function generateContentWithRetry(payload, retries = 3) {
           for (let i = 0; i < retries; i++) {
