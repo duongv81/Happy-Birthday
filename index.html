@@ -654,7 +654,7 @@
       flex-direction: column;
       align-items: center;
       width: 300px; /* Max width of the gallery container */
-      height: 850px; /* Fixed height to accommodate 3 photos stacked vertically + margin */
+      height: 700px; /* GIẢM HEIGHT: Chỉ cần chứa 3 ảnh xích lại gần hơn */
       margin-left: 20px;
       position: relative;
       padding: 10px; 
@@ -684,7 +684,7 @@
     
     /* Photo 2: Middle, slant right */
     .photo-gallery > img.image-slant-2 {
-        top: 290px; /* Khoảng cách dọc tách biệt */
+        top: 230px; /* GIẢM KHOẢNG CÁCH DỌC: 290px -> 230px */
         transform: rotate(5deg); /* Chéo phải */
         margin-left: 50px; /* Đẩy sang phải 1 chút */
         z-index: 5;
@@ -692,7 +692,7 @@
 
     /* Photos 3 onwards: Stacked at the position of Photo 3, slightly slanted right, slightly offset */
     .photo-gallery > img.image-stack {
-        top: 580px; /* Khoảng cách dọc tách biệt */
+        top: 460px; /* GIẢM KHOẢNG CÁCH DỌC: 580px -> 460px (230px * 2) */
         left: 50%;
         transform: translateX(-50%) rotate(3deg); /* Nghiêng nhẹ phải, đặt ở giữa */
         margin-left: 10px; /* Offset nhẹ để tạo hiệu ứng thẻ bài */
@@ -1153,7 +1153,7 @@
             width: 100%;
             max-width: 320px;
             padding: 10px 0;
-            height: 800px; /* Adjusted height for mobile */
+            height: 650px; /* Điều chỉnh height cho mobile */
         }
         .photo-gallery > img {
             width: 90%;
@@ -1166,12 +1166,12 @@
             margin-right: 30px; /* Giảm đẩy sang trái */
         }
         .photo-gallery > img.image-slant-2 {
-            top: 270px; /* Điều chỉnh khoảng cách dọc */
+            top: 220px; /* Giảm khoảng cách dọc (270px -> 220px) */
             transform: rotate(3deg); /* Giảm độ nghiêng */
             margin-left: 30px; /* Giảm đẩy sang phải */
         }
         .photo-gallery > img.image-stack {
-            top: 540px; /* Điều chỉnh vị trí xếp chồng */
+            top: 440px; /* Điều chỉnh vị trí xếp chồng (540px -> 440px) */
             transform: translateX(-50%) rotate(3deg); 
         }
 
@@ -1719,14 +1719,21 @@
           // Handle stack setup
           if (stackImages.length > 0) {
               currentStackIndex = 0;
-              stackImages[currentStackIndex].classList.add('active');
-              
-              // Add click listener to trigger image change
+              // Add click listener to trigger image change to the photo gallery container
+              // This is necessary because the stacked images are positioned absolutely inside.
               photoGallery.addEventListener('click', function(e) {
-                  if (e.target.classList.contains('image-stack')) {
-                      nextStackImage();
+                  // Only cycle stack images if the click target is the stack area 
+                  // or specifically one of the stacked images
+                  if (e.target.classList.contains('image-stack') || e.target.closest('.photo-gallery')) {
+                      // We must explicitly ensure stackImages are present before calling nextStackImage
+                      if (stackImages.length > 0) {
+                           nextStackImage();
+                      }
                   }
               });
+              
+              // Initial active image must be set
+              stackImages[currentStackIndex].classList.add('active');
           }
           
           startScreen.classList.remove('hidden');
