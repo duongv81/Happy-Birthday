@@ -654,7 +654,7 @@
       flex-direction: column;
       align-items: center;
       width: 300px; /* Max width of the gallery container */
-      height: 700px; /* GIẢM HEIGHT: Chỉ cần chứa 3 ảnh xích lại gần hơn */
+      height: 700px; /* GIỮ HEIGHT */
       margin-left: 20px;
       position: relative;
       padding: 10px; 
@@ -684,18 +684,19 @@
     
     /* Photo 2: Middle, slant right */
     .photo-gallery > img.image-slant-2 {
-        top: 230px; /* GIẢM KHOẢNG CÁCH DỌC: 290px -> 230px */
+        top: 230px; /* GIỮ KHOẢNG CÁCH DỌC: 230px */
         transform: rotate(5deg); /* Chéo phải */
         margin-left: 50px; /* Đẩy sang phải 1 chút */
         z-index: 5;
     }
 
-    /* Photos 3 onwards: Stacked at the position of Photo 3, slightly slanted right, slightly offset */
+    /* Photos 3 onwards: Stacked at the position of Photo 3, chéo trái */
     .photo-gallery > img.image-stack {
-        top: 460px; /* GIẢM KHOẢNG CÁCH DỌC: 580px -> 460px (230px * 2) */
+        top: 460px; /* VỊ TRÍ MỚI: 460px (230px * 2) */
         left: 50%;
-        transform: translateX(-50%) rotate(3deg); /* Nghiêng nhẹ phải, đặt ở giữa */
-        margin-left: 10px; /* Offset nhẹ để tạo hiệu ứng thẻ bài */
+        transform: translateX(-50%) rotate(-5deg); /* CHÉO TRÁI: Đặt ở giữa và nghiêng -5deg */
+        margin-right: 50px; /* ĐẨY SANG TRÁI: Dùng margin-right để di chuyển tổng thể sang trái */
+        margin-left: 0; /* Đặt lại margin-left */
         z-index: 4; /* Lớp dưới ảnh chéo 1 và 2 */
         opacity: 0;
         pointer-events: none; /* Không thể click ảnh bị ẩn */
@@ -705,7 +706,7 @@
     .photo-gallery > img.image-stack.active {
         opacity: 1;
         pointer-events: auto; /* Có thể click ảnh đang hiển thị */
-        transform: translateX(-50%) rotate(3deg) scale(1);
+        transform: translateX(-50%) rotate(-5deg) scale(1);
     }
 
     /* Hover effect for all displayed photos */
@@ -722,7 +723,7 @@
         transform: rotate(5deg) scale(1.05);
     }
     .photo-gallery > img.image-stack.active:hover {
-        transform: translateX(-50%) rotate(3deg) scale(1.05);
+        transform: translateX(-50%) rotate(-5deg) scale(1.05); /* Cập nhật hover chéo trái */
     }
 
 
@@ -1172,7 +1173,9 @@
         }
         .photo-gallery > img.image-stack {
             top: 440px; /* Điều chỉnh vị trí xếp chồng (540px -> 440px) */
-            transform: translateX(-50%) rotate(3deg); 
+            transform: translateX(-50%) rotate(-3deg); /* CHÉO TRÁI VÀ ĐẨY SANG TRÁI */
+            margin-right: 30px; /* Đẩy sang trái */
+            margin-left: 0; /* Reset */
         }
 
         /* --- Letter Static Position --- */
@@ -1256,7 +1259,6 @@
   </style>
 </head>
 <body class="gradient-bg">
-  <!-- Loading Overlay for API Calls -->
   <div id="loading-overlay">
     <div class="spinner"></div>
     Đang tạo phép màu...
@@ -1269,7 +1271,6 @@
     </header>
     
     <div class="content">
-      <!-- Creation Form -->
       <div id="creation-section">
         <div class="form-section">
           <h2>Thông tin </h2>
@@ -1326,7 +1327,6 @@
         </div>
       </div>
       
-      <!-- Share Section -->
       <div id="share-section" class="hidden">
         <div class="share-section">
           <h2>Birthday của bạn đã sẵn sàng!</h2>
@@ -1341,10 +1341,8 @@
     </div>
   </div>
   
-  <!-- Birthday Effect Scenes -->
   <div id="birthday-effect-overlay" class="birthday-scene-overlay">
     
-    <!-- Floating Bubbles -->
     <div class="bubbles-container" id="bubblesContainer">
       <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
       <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
@@ -1361,14 +1359,12 @@
     
     <audio id="background-music" loop preload="auto" style="display: none;"></audio>
     
-    <!-- Start Screen -->
     <div id="startScreen">
         <h2 id="start-screen-title">Bạn đã sẵn sàng chưa?</h2>
         <p>Một bất ngờ đặc biệt đang chờ đợi bạn.</p>
         <button id="start-flow-btn" class="btn start-btn">Khám phá Ngay!</button>
     </div>
 
-    <!-- Candle Scene -->
     <div id="candleSection" class="hidden">
       <div class="candle-holder">
           <div class="wick"></div>
@@ -1384,7 +1380,6 @@
       <div class="countdown" id="countdown">3</div>
     </div>
 
-    <!-- Cake Scene -->
     <div id="cakeSection" class="hidden">
         <img src="hinhanh/trangtri.png" alt="Trang trí" class="top-decoration" id="topDecoration" onerror="this.style.display='none'">
         <div class="cake-container">
@@ -1410,9 +1405,7 @@
     </div>
   </div>
   
-  <!-- === NEW/MODIFIED: Letter Modal V8 - With Envelope Animation === -->
   <div id="letter-modal" class="letter-modal-overlay">
-      <!-- Envelope animation -->
       <div class="envelope-container" id="envelope-container">
           <div class="envelope">
               <div class="envelope-lid"></div>
@@ -1422,7 +1415,6 @@
           </div>
       </div>
       
-      <!-- The message box -->
       <div id="message-box">
           <button id="modal-close-btn" class="modal-close-btn">&times;</button>
           <div class="message-box-inner">
